@@ -363,6 +363,17 @@ body {
   /* transition dihapus: konflik dengan GSAP */
 }
 
+/* Warna-warna untuk setiap lingkaran */
+.eight svg:nth-child(1) circle { fill: #e8c97f; }
+.eight svg:nth-child(2) circle { fill: #ff9fb2; }
+.eight svg:nth-child(3) circle { fill: #8c7ae6; }
+.eight svg:nth-child(4) circle { fill: #6fa8dc; }
+.eight svg:nth-child(5) circle { fill: #f0b27a; }
+.eight svg:nth-child(6) circle { fill: #e8c97f; }
+.eight svg:nth-child(7) circle { fill: #ff9fb2; }
+.eight svg:nth-child(8) circle { fill: #8c7ae6; }
+.eight svg:nth-child(9) circle { fill: #6fa8dc; }
+
 /* Ukuran Desktop (layar > 768px) */
 @media (min-width: 769px) {
   .eight svg {
