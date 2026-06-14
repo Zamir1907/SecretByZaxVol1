@@ -353,7 +353,7 @@ button[type="submit"]:hover {
 @media (min-width: 769px) {
   .six .hat {
     top: -79px;
-    left: 41%;
+    left: 40%;
     transform: translateX(-50%) rotate(-22deg) !important;
   }
 }
