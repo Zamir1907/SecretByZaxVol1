@@ -118,12 +118,17 @@ const animationTimeline = () => {
     .staggerFromTo(".ballons img", 2.5, { opacity: 0.9, y: 1400 }, { opacity: 1, y: -1000 }, 0.2)
     .from(".profile-picture", 0.5, { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
 .from(".hat", 0.8, { 
-  x: -300, 
+  x: -300,
   y: -150,
   rotation: -720,
   scale: 0.3,
+  opacity: 0,
   ease: Back.easeOut.config(1.2)
-})
+}, "+=0.5")
+.to(".hat", 0.3, {
+  rotation: -22,
+  ease: Power2.easeOut
+}, "-=0.2")
     .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
     .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
     .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
