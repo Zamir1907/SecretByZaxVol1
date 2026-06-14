@@ -395,7 +395,7 @@ button[type="submit"]:hover {
   height: auto !important;
 }
 
-/* ===== BALON ===== */
+/* ===== BALON - UKURAN BESAR & HANYA DI AWAL ===== */
 .seven {
   position: relative;
   width: 100%;
@@ -412,6 +412,17 @@ button[type="submit"]:hover {
   height: 100%;
   overflow: hidden;
   z-index: 5;
+  animation: fadeOutBalloons 0.5s forwards;
+  animation-delay: 8s; /* Balon ilang setelah 8 detik */
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeOutBalloons {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
 }
 
 .ballons img {
@@ -419,37 +430,34 @@ button[type="submit"]:hover {
   bottom: -50px;
   width: auto;
   height: auto;
-  max-width: 60px;
-  animation: floatBalloon 8s ease-in infinite;
+  max-width: 80px; /* Ukuran default lebih besar */
+  animation: floatBalloon 6s ease-in forwards;
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
-.ballons img:nth-child(1) { left: 5%; animation-duration: 7s; animation-delay: 0s; }
-.ballons img:nth-child(2) { left: 15%; animation-duration: 9s; animation-delay: 2s; width: 50px; }
-.ballons img:nth-child(3) { left: 28%; animation-duration: 8s; animation-delay: 1s; }
-.ballons img:nth-child(4) { left: 42%; animation-duration: 10s; animation-delay: 3s; width: 55px; }
-.ballons img:nth-child(5) { left: 55%; animation-duration: 7.5s; animation-delay: 0.5s; }
-.ballons img:nth-child(6) { left: 68%; animation-duration: 8.5s; animation-delay: 2.5s; width: 45px; }
-.ballons img:nth-child(7) { left: 80%; animation-duration: 9.5s; animation-delay: 1.5s; }
-.ballons img:nth-child(8) { left: 92%; animation-duration: 7s; animation-delay: 3.5s; width: 50px; }
-.ballons img:nth-child(9) { left: 35%; animation-duration: 11s; animation-delay: 4s; width: 65px; }
-
-@keyframes floatBalloon {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
-  50% { transform: translateY(-50vh) rotate(10deg); opacity: 0.7; }
-  100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
-}
-
+/* HP: balon lebih besar lagi */
 @media (max-width: 768px) {
   .ballons img {
-    max-width: 40px;
+    max-width: 70px;
   }
-  .ballons img:nth-child(2) { width: 35px; }
-  .ballons img:nth-child(4) { width: 40px; }
-  .ballons img:nth-child(6) { width: 30px; }
-  .ballons img:nth-child(8) { width: 35px; }
-  .ballons img:nth-child(9) { width: 45px; }
+}
+
+@media (max-width: 480px) {
+  .ballons img {
+    max-width: 60px;
+  }
+}
+
+@keyframes floatBalloon {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(15deg);
+    opacity: 0;
+  }
 }
 
 /* ===== LINGKARAN MUTER ===== */
