@@ -1,37 +1,57 @@
-// Birthday page scripts - PAUSE SAMPAI USER KLIK OVERLAY
+// Birthday page scripts - FINAL WORK ON INSTAGRAM
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 let animationStarted = false;
-let tl = null; // Timeline GSAP
+let tl = null;
 
+// Deteksi Instagram
+const isInstagram = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return ua.indexOf('Instagram') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+};
+
+// Fungsi play musik
 function playMusic() {
   if (!bgMusic || musicPlayed) return;
+  
+  bgMusic.load();
+  bgMusic.volume = 1.0;
+  
   bgMusic.play().then(() => {
     musicPlayed = true;
     console.log('Musik berjalan');
-  }).catch(e => console.log('Error play musik:', e));
+  }).catch(e => {
+    console.log('Error play musik:', e.message);
+    
+    // Khusus Instagram: coba lagi setelah delay
+    if (isInstagram() && !musicPlayed) {
+      setTimeout(() => {
+        bgMusic.play().catch(() => {});
+      }, 500);
+    }
+  });
 }
 
-// ===== FUNGSI MEMULAI SEMUANYA (dipanggil saat user klik overlay) =====
+// ===== MEMULAI SEMUANYA (dipanggil saat user klik overlay) =====
 function startEverything() {
   if (animationStarted) return;
   animationStarted = true;
   
-  // Play musik
   playMusic();
   
-  // Hapus overlay dengan animasi fade out
+  // Hilangkan overlay dengan animasi
   const overlay = document.getElementById('startOverlay');
   if (overlay) {
     overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.5s ease';
     setTimeout(() => {
       overlay.style.display = 'none';
     }, 500);
   }
   
-  // Resume animasi GSAP (dari posisi pause)
+  // Resume animasi
   if (tl && tl.paused) {
     tl.resume();
   }
@@ -42,7 +62,7 @@ const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
-      playMusic();
+      if (!musicPlayed) playMusic();
       Swal.fire({
         title: "✨ Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
@@ -75,7 +95,6 @@ const animationTimeline = () => {
   const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
   const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
 
-  // BUAT TIMELINE DENGAN STATE PAUSED
   tl = new TimelineMax({ paused: true });
 
   tl.to(".container", 0.6, { visibility: "visible" })
@@ -121,13 +140,12 @@ const animationTimeline = () => {
     replyBtn.addEventListener("click", () => {
       if (bgMusic) {
         bgMusic.currentTime = 0;
-        bgMusic.play().then(() => {
-          musicPlayed = true;
-        }).catch(e => console.log('Replay error:', e));
+        bgMusic.play().catch(() => {});
+        musicPlayed = true;
       }
       tl.restart();
-      tl.pause(); // PAUSE LAGI SETELAH RESTART
-      animationStarted = false; // reset flag, perlu klik lagi
+      tl.pause();
+      animationStarted = false;
       
       // Munculkan overlay lagi
       const overlay = document.getElementById('startOverlay');
@@ -141,7 +159,8 @@ const animationTimeline = () => {
 
 // ===== LOAD =====
 window.addEventListener("load", () => {
-  console.log('Halaman loaded - animasi dalam keadaan pause');
+  console.log('Halaman loaded - animasi paused, platform:', isInstagram() ? 'Instagram' : 'Browser');
+  
   animationTimeline();
   setupWishButton();
   
@@ -152,9 +171,14 @@ window.addEventListener("load", () => {
     overlay.addEventListener('touchstart', startEverything);
   }
   
-  // Hapus localStorage loginSuccess (opsional)
+  // Hapus localStorage setelah login sukses
   if (localStorage.getItem('loginSuccess') === 'true') {
     localStorage.removeItem('loginSuccess');
+  }
+  
+  // Khusus Instagram: tampilkan pesan tambahan di console
+  if (isInstagram()) {
+    console.log('Mode Instagram aktif - user harus klik overlay untuk mulai');
   }
 });
 
