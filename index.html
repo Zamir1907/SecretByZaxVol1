@@ -161,10 +161,26 @@ transform: translateY(-50%);
       line-height: 1;
     }
 
+    .toggle-pw:focus {
+  outline: none;
+}
+
+.toggle-pw:focus-visible {
+  outline: 2px solid rgba(232,201,127,0.5);
+  border-radius: 4px;
+}
+
     @media (max-width: 768px) {
   .toggle-pw {
     top: 35%;
     transform: translateY(-35%);
+  }
+}
+
+    @media (min-width: 769px) {
+  .toggle-pw {
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
