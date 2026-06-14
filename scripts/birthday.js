@@ -1,4 +1,4 @@
-// Birthday page scripts
+// Birthday page scripts - VERSION YANG WORK DI IG (langsung bunyi)
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
@@ -12,18 +12,16 @@ function playMusic() {
   }).catch(e => console.log('Error play:', e));
 }
 
-// Cek apakah login sukses (dari localStorage)
+// Cek login sukses dari localStorage
 const isLoginSuccess = localStorage.getItem('loginSuccess') === 'true';
 
-// Jika login sukses, mainkan musik
+// Jika login sukses, langsung play musik (dan hapus status)
 if (isLoginSuccess) {
-  // Hapus status setelah dibaca
   localStorage.removeItem('loginSuccess');
-  
-  // Tunggu sebentar lalu play (biar DOM siap)
+  // Tunggu sebentar biar DOM siap
   setTimeout(() => {
     playMusic();
-  }, 500);
+  }, 100);
 }
 
 // ===== SETUP TOMBOL WISH =====
@@ -44,7 +42,7 @@ const setupWishButton = () => {
   }
 };
 
-// ===== ANIMATION TIMELINE (sama seperti sebelumnya) =====
+// ===== ANIMATION TIMELINE =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
