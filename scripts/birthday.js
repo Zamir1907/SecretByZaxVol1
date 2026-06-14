@@ -10,9 +10,22 @@ window.addEventListener("load", () => {
     });
   }
   animationTimeline();
-  
   // Setup tombol wish
   setupWishButton();
+  // Cek apakah login berhasil, lalu play musik
+const playMusicAfterLogin = () => {
+  const audio = document.getElementById('bgMusic');
+  const loginStatus = localStorage.getItem('loginSuccess');
+  
+  if (loginStatus === 'true' && audio) {
+    audio.play().catch(e => console.log('Autoplay blocked, but user already interacted via login:', e));
+    // Hapus status setelah play
+    localStorage.removeItem('loginSuccess');
+  }
+};
+
+// Panggil fungsi ini
+playMusicAfterLogin();
 });
 
 const setupWishButton = () => {
