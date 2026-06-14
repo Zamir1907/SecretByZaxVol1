@@ -1,8 +1,15 @@
-// Birthday page scripts
+// Birthday page scripts - WORK DI INSTAGRAM
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
+let loginSuccess = false;
+
+// Cek apakah login sukses (dari localStorage)
+if (localStorage.getItem('loginSuccess') === 'true') {
+  loginSuccess = true;
+  localStorage.removeItem('loginSuccess'); // hapus setelah dibaca
+}
 
 function playMusic() {
   if (!bgMusic || musicPlayed) return;
@@ -12,18 +19,28 @@ function playMusic() {
   }).catch(e => console.log('Error play:', e));
 }
 
-// Cek apakah login sukses (dari localStorage)
-const isLoginSuccess = localStorage.getItem('loginSuccess') === 'true';
-
-// Jika login sukses, mainkan musik
-if (isLoginSuccess) {
-  // Hapus status setelah dibaca
-  localStorage.removeItem('loginSuccess');
+// ===== UNTUK INSTAGRAM: Pasang listener di berbagai event =====
+// Tapi hanya akan aktif jika loginSuccess = true
+function setupInstagramUnlock() {
+  if (!loginSuccess) return; // Hanya jika login berhasil
   
-  // Tunggu sebentar lalu play (biar DOM siap)
-  setTimeout(() => {
-    playMusic();
-  }, 500);
+  const events = ['click', 'touchstart'];
+  let unlocked = false;
+  
+  function unlockMusic() {
+    if (!unlocked) {
+      playMusic();
+      unlocked = true;
+      // Hapus listener setelah sukses
+      events.forEach(evt => {
+        document.removeEventListener(evt, unlockMusic);
+      });
+    }
+  }
+  
+  events.forEach(evt => {
+    document.addEventListener(evt, unlockMusic);
+  });
 }
 
 // ===== SETUP TOMBOL WISH =====
@@ -31,7 +48,7 @@ const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
-      playMusic();
+      playMusic(); // Kalau mau langsung nyala pas klik tombol
       Swal.fire({
         title: "Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
@@ -44,7 +61,7 @@ const setupWishButton = () => {
   }
 };
 
-// ===== ANIMATION TIMELINE (sama seperti sebelumnya) =====
+// ===== ANIMATION TIMELINE =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
@@ -109,6 +126,7 @@ const animationTimeline = () => {
       if (bgMusic) {
         bgMusic.currentTime = 0;
         bgMusic.play().catch(() => {});
+        musicPlayed = true;
       }
       tl.restart();
     });
@@ -119,6 +137,7 @@ const animationTimeline = () => {
 window.addEventListener("load", () => {
   animationTimeline();
   setupWishButton();
+  setupInstagramUnlock(); // <-- INI KUNCI UNTUK INSTAGRAM
 });
 
 document.addEventListener('contextmenu', e => e.preventDefault());
