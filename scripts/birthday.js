@@ -189,8 +189,10 @@ const animationTimeline = () => {
       rotationZ: -30,
       ease: Back.easeOut.config(1.2)
     }, "-=2")
-    .from(".hat", 0.5, { x: -80, y: 300, rotation: -150, opacity: 0, ease: Power3.easeOut })
-.to(".hat", 0, { rotation: -22 }) // set ke posisi final CSS yang tadi kita hapus
+// Animasi masuk (spin landing)
+.from(".hat", 1.0, { y: -250, rotation: 720, scale: 0.3, opacity: 0, ease: Elastic.easeOut.config(1, 0.6) })
+// Set posisi final miring -22deg via GSAP
+.to(".hat", 0.3, { rotation: -22, ease: Power2.easeOut }, "-=0.1")
 
     // ===== .wish-hbd span: Wave Bounce — dikurangi dari rotation:150 → 30, lebih elegan =====
 .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
