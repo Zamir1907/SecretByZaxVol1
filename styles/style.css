@@ -172,10 +172,15 @@ body {
   padding: 0 15px;
 }
 
+
 .idea-3 strong {
   border-radius: 4px;
   display: inline-block;
   padding: 3px 8px;
+  background: linear-gradient(#e8c97f, #e8c97f) no-repeat left center;
+  background-size: 0% 100%;
+  color: inherit; /* warna teks awal ikut parent */
+  transition: color 0.3s ease;
 }
 
 .five .idea-5 {
