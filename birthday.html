@@ -15,10 +15,25 @@
 
 <body>
 
-<div id="instagramLoading" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#1a1a2e; z-index:9999; display:flex; justify-content:center; align-items:center; color:white; font-family:monospace; flex-direction:column;">
-  <div>Loading...</div>
-  <div style="font-size:12px; margin-top:10px;">Tap anywhere to start music 🔈</div>
+<!-- OVERLAY MULAI - ELEGAN BAHASA INDONESIA -->
+<div id="startOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:linear-gradient(135deg, #0d0f14 0%, #1a1d2e 100%); z-index:99999; display:flex; align-items:center; justify-content:center; flex-direction:column; cursor:pointer; backdrop-filter:blur(0px); transition:all 0.5s ease;">
+  <div style="text-align:center; animation:floatGlow 2s ease-in-out infinite;">
+    <div style="font-size:70px; margin-bottom:20px;">🎂✨</div>
+    <h2 style="color:#e8c97f; font-family:'Poppins',sans-serif; font-size:28px; margin:0 0 10px; letter-spacing:2px;">Halaman Spesial</h2>
+    <p style="color:#f4f1ea; font-family:'Poppins',sans-serif; font-size:16px; margin:0 0 25px; opacity:0.8;">Kejutan untukmu telah siap</p>
+    <div style="background:linear-gradient(135deg, #e8c97f, #c9a45c); border-radius:50px; padding:14px 32px; display:inline-block; box-shadow:0 0 30px rgba(232,201,127,0.4);">
+      <span style="color:#1a1a1a; font-weight:600; font-family:'Poppins',sans-serif;">💫 Klik untuk mulai 💫</span>
+    </div>
+    <p style="color:#a9adc1; font-family:'Poppins',sans-serif; font-size:12px; margin-top:30px;">Nikmati animasi & musik spesial</p>
+  </div>
 </div>
+
+<style>
+@keyframes floatGlow {
+  0%, 100% { transform: translateY(0); text-shadow: 0 0 10px rgba(232,201,127,0.3); }
+  50% { transform: translateY(-8px); text-shadow: 0 0 25px rgba(232,201,127,0.6); }
+}
+</style>
 
 <style>
 @keyframes pulse {
