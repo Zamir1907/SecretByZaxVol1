@@ -1,4 +1,4 @@
-// Birthday page scripts - WORK DI INSTAGRAM
+// Birthday page scripts - FIXED VERSION
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
@@ -6,41 +6,91 @@ let musicPlayed = false;
 let loginSuccess = false;
 
 // Cek apakah login sukses (dari localStorage)
+// HAPUS FLAG setelah dibaca, TAPI simpan di sessionStorage untuk survive refresh
 if (localStorage.getItem('loginSuccess') === 'true') {
   loginSuccess = true;
-  localStorage.removeItem('loginSuccess'); // hapus setelah dibaca
+  localStorage.removeItem('loginSuccess'); // hapus dari localStorage
+  
+  // Simpan ke sessionStorage agar survive di page ini saat refresh
+  sessionStorage.setItem('page2Accessed', 'true');
+}
+
+// Cek juga dari sessionStorage (untuk kasus refresh di page 2)
+if (sessionStorage.getItem('page2Accessed') === 'true') {
+  loginSuccess = true;
 }
 
 function playMusic() {
-  if (!bgMusic || musicPlayed) return;
+  if (!bgMusic) {
+    console.log('Audio element tidak ditemukan');
+    return;
+  }
+  
+  if (musicPlayed) {
+    console.log('Musik sudah diputar');
+    return;
+  }
+  
+  // Reset audio jika perlu
+  bgMusic.currentTime = 0;
+  
   bgMusic.play().then(() => {
     musicPlayed = true;
-    console.log('Musik berjalan');
-  }).catch(e => console.log('Error play:', e));
+    console.log('Musik berjalan dengan sukses');
+  }).catch(e => {
+    console.log('Error play music:', e);
+    // Fallback: coba lagi setelah user interaction
+    if (e.name === 'NotAllowedError') {
+      console.log('Menunggu user interaction...');
+    }
+  });
 }
 
-// ===== UNTUK INSTAGRAM: Pasang listener di berbagai event =====
-// Tapi hanya akan aktif jika loginSuccess = true
-function setupInstagramUnlock() {
-  if (!loginSuccess) return; // Hanya jika login berhasil
+// ===== UNTUK INSTAGRAM & BROWSER: Universal unlock =====
+function setupUniversalUnlock() {
+  // Di page 2, kita ALWAYS setup unlock untuk musik
+  // Tapi musik hanya akan diputar jika loginSuccess = true
+  // Atau langsung mainkan otomatis jika browser mengizinkan
   
-  const events = ['click', 'touchstart'];
+  const events = ['click', 'touchstart', 'touchend'];
   let unlocked = false;
   
   function unlockMusic() {
-    if (!unlocked) {
-      playMusic();
-      unlocked = true;
-      // Hapus listener setelah sukses
-      events.forEach(evt => {
-        document.removeEventListener(evt, unlockMusic);
+    if (!unlocked && bgMusic) {
+      // Coba putar musik
+      bgMusic.play().then(() => {
+        musicPlayed = true;
+        unlocked = true;
+        console.log('Musik unlocked dan berjalan');
+        
+        // Hapus listener setelah sukses
+        events.forEach(evt => {
+          document.removeEventListener(evt, unlockMusic);
+        });
+      }).catch(e => {
+        console.log('Gagal unlock music:', e);
       });
     }
   }
   
+  // Pasang listener untuk berbagai event
   events.forEach(evt => {
     document.addEventListener(evt, unlockMusic);
   });
+  
+  // Coba mainkan otomatis (mungkin berhasil di browser)
+  if (!musicPlayed && bgMusic) {
+    bgMusic.play().then(() => {
+      musicPlayed = true;
+      console.log('Auto-play sukses');
+    }).catch(e => {
+      console.log('Auto-play tidak diizinkan, menunggu user interaction');
+      // Jika login success, kita perlu user interaction
+      if (loginSuccess) {
+        console.log('Menunggu user klik untuk memutar musik');
+      }
+    });
+  }
 }
 
 // ===== SETUP TOMBOL WISH =====
@@ -48,7 +98,14 @@ const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
-      playMusic(); // Kalau mau langsung nyala pas klik tombol
+      // Putar musik saat klik tombol (jika belum diputar)
+      if (!musicPlayed && bgMusic) {
+        bgMusic.play().then(() => {
+          musicPlayed = true;
+          console.log('Musik diputar dari tombol wish');
+        }).catch(e => console.log('Error play dari wish:', e));
+      }
+      
       Swal.fire({
         title: "Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
@@ -125,8 +182,10 @@ const animationTimeline = () => {
     replyBtn.addEventListener("click", () => {
       if (bgMusic) {
         bgMusic.currentTime = 0;
-        bgMusic.play().catch(() => {});
-        musicPlayed = true;
+        bgMusic.play().then(() => {
+          musicPlayed = true;
+          console.log('Musik replay');
+        }).catch(e => console.log('Error replay:', e));
       }
       tl.restart();
     });
@@ -135,10 +194,13 @@ const animationTimeline = () => {
 
 // ===== LOAD =====
 window.addEventListener("load", () => {
+  console.log('Page loaded, loginSuccess:', loginSuccess);
+  
   animationTimeline();
   setupWishButton();
-  setupInstagramUnlock(); // <-- INI KUNCI UNTUK INSTAGRAM
+  setupUniversalUnlock(); // Universal unlock untuk semua platform
 });
 
+// Prevent context menu & double click
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
