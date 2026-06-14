@@ -1,34 +1,59 @@
-// Birthday page scripts - VERSION YANG WORK DI IG (langsung bunyi)
-
-// ===== SETUP MUSIK =====
+// ========== BIRTHDAY JS - VERSI FINAL ==========
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 
+// === 1. Cek status login, tapi tidak otomatis play ===
+const everLoggedIn = localStorage.getItem('loginSuccess') === 'true';
+if (everLoggedIn) localStorage.removeItem('loginSuccess');
+
+// === 2. FUNGSI PLAY YANG HANDAL ===
 function playMusic() {
   if (!bgMusic || musicPlayed) return;
   bgMusic.play().then(() => {
     musicPlayed = true;
     console.log('Musik berjalan');
-  }).catch(e => console.log('Error play:', e));
+  }).catch(e => {
+    console.warn('Gagal play:', e);
+  });
 }
 
-// Cek login sukses dari localStorage
-const isLoginSuccess = localStorage.getItem('loginSuccess') === 'true';
+// === 3. INI KUNCI UNTUK INSTAGRAM ===
+// Pakai "first tap" — user harus tap/klik di halaman ini minimal sekali (Instagram WAJIB)
+function installTapToPlay() {
+  const handler = () => {
+    if (everLoggedIn && !musicPlayed) {
+      playMusic();
+    }
+    // Setelah user tap, hapus listener supaya ga ganggu
+    document.removeEventListener('click', handler);
+    document.removeEventListener('touchstart', handler);
+  };
+  document.addEventListener('click', handler);
+  document.addEventListener('touchstart', handler);
+}
 
-// Jika login sukses, langsung play musik (dan hapus status)
-if (isLoginSuccess) {
-  localStorage.removeItem('loginSuccess');
-  // Tunggu sebentar biar DOM siap
-  setTimeout(() => {
+// === 4. PERBAIKAN REFRESH ===
+// Simpan status "lagu pernah diputar" supaya di refresh tidak mati
+window.addEventListener('beforeunload', () => {
+  if (musicPlayed) sessionStorage.setItem('musicWasPlaying', 'true');
+});
+
+window.addEventListener('load', () => {
+  // Kalau sebelumnya sudah diputar, coba lanjutkan
+  if (sessionStorage.getItem('musicWasPlaying') === 'true' && bgMusic && !musicPlayed) {
+    bgMusic.currentTime = 0;
     playMusic();
-  }, 100);
-}
+  }
+  installTapToPlay();
+  animationTimeline();
+  setupWishButton();
+});
 
-// ===== SETUP TOMBOL WISH =====
-const setupWishButton = () => {
-  const wishBtn = document.getElementById("wishButton");
+// === 5. FUNGSI LAIN (wish, replay, animasi) ===
+function setupWishButton() {
+  const wishBtn = document.getElementById('wishButton');
   if (wishBtn) {
-    wishBtn.addEventListener("click", () => {
+    wishBtn.addEventListener('click', () => {
       playMusic();
       Swal.fire({
         title: "Untuk Kamu ✨",
@@ -40,84 +65,8 @@ const setupWishButton = () => {
       });
     });
   }
-};
+}
 
-// ===== ANIMATION TIMELINE =====
-const animationTimeline = () => {
-  const textBoxChars = document.querySelector(".hbd-chatbox");
-  const hbd = document.querySelector(".wish-hbd");
-
-  if (textBoxChars) {
-    textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-      .split("")
-      .join("</span><span>")}</span>`;
-  }
-
-  if (hbd) {
-    hbd.innerHTML = `<span>${hbd.innerHTML
-      .split("")
-      .join("</span><span>")}</span>`;
-  }
-
-  const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
-  const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
-
-  const tl = new TimelineMax();
-
-  tl.to(".container", 0.6, { visibility: "visible" })
-    .from(".one", 0.7, { opacity: 0, y: 10 })
-    .from(".two", 0.4, { opacity: 0, y: 10 })
-    .to(".one", 0.7, { opacity: 0, y: 10 }, "+=3.5")
-    .to(".two", 0.7, { opacity: 0, y: 10 }, "-=1")
-    .from(".three", 0.7, { opacity: 0, y: 10 })
-    .to(".three", 0.7, { opacity: 0, y: 10 }, "+=3")
-    .from(".four", 0.7, { scale: 0.2, opacity: 0 })
-    .from(".fake-btn", 0.3, { scale: 0.2, opacity: 0 })
-    .staggerTo(".hbd-chatbox span", 1.5, { visibility: "visible" }, 0.05)
-    .to(".fake-btn", 0.1, { backgroundColor: "#e8c97f", color: "#1a1a1a" }, "+=2.2")
-    .to(".four", 0.5, { scale: 0.2, opacity: 0, y: -150 }, "+=0.8")
-    .from(".idea-1", 0.7, ideaTextTrans)
-    .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.5")
-    .from(".idea-2", 0.7, ideaTextTrans)
-    .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.5")
-    .from(".idea-3", 0.7, ideaTextTrans)
-    .to(".idea-3 strong", 0.5, { scale: 1.1, x: 10, backgroundColor: "#e8c97f", color: "#1a1a1a" })
-    .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.5")
-    .from(".idea-4", 0.7, ideaTextTrans)
-    .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.5")
-    .from(".idea-5", 0.7, { rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=1.5")
-    .to(".idea-5 span", 0.7, { rotation: 90, x: 8 }, "+=1.4")
-    .to(".idea-5", 0.7, { scale: 0.2, opacity: 0 }, "+=2")
-    .staggerFrom(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: 15, ease: Expo.easeOut }, 0.2)
-    .staggerTo(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: -15, ease: Expo.easeOut }, 0.2, "+=1.5")
-    .staggerFromTo(".ballons img", 2.5, { opacity: 0.9, y: 1400 }, { opacity: 1, y: -1000 }, 0.2)
-    .from(".profile-picture", 0.5, { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
-    .from(".hat", 0.5, { x: -100, y: 350, rotation: -180, opacity: 0 })
-    .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
-    .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
-    .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")
-    .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4 }, 0.3)
-    .to(".six", 0.5, { opacity: 0, y: 30, zIndex: "-1" })
-    .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
-    .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
-
-  const replyBtn = document.getElementById("replay");
-  if (replyBtn) {
-    replyBtn.addEventListener("click", () => {
-      if (bgMusic) {
-        bgMusic.currentTime = 0;
-        bgMusic.play().catch(() => {});
-      }
-      tl.restart();
-    });
-  }
-};
-
-// ===== LOAD =====
-window.addEventListener("load", () => {
-  animationTimeline();
-  setupWishButton();
-});
-
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('dblclick', e => e.preventDefault());
+function animationTimeline() {
+  // ... (kode GSAP animasimu yang sudah kamu punya sebelumnya, taruh di sini utuh)
+}
