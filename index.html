@@ -161,13 +161,14 @@ transform: translateY(-50%);
       line-height: 1;
     }
 
-    .toggle-pw:focus {
+.toggle-pw:focus {
   outline: none;
 }
 
 .toggle-pw:focus-visible {
-  outline: 2px solid rgba(232,201,127,0.5);
-  border-radius: 4px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(232,201,127,0.3);
+  border-radius: 6px;
 }
 
     @media (max-width: 768px) {
@@ -179,8 +180,8 @@ transform: translateY(-50%);
 
     @media (min-width: 769px) {
   .toggle-pw {
-    top: 50%;
-    transform: translateY(-50%);
+    top: 80%;
+    transform: translateY(-80%);
   }
 }
 
