@@ -1,95 +1,168 @@
-// Birthday page scripts - FIXED VERSION
+// Birthday page scripts - INSTAGRAM OPTIMIZED VERSION
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
-let loginSuccess = false;
+let instagramUnlockAttempts = 0;
 
-// Cek apakah login sukses (dari localStorage)
-// HAPUS FLAG setelah dibaca, TAPI simpan di sessionStorage untuk survive refresh
-if (localStorage.getItem('loginSuccess') === 'true') {
-  loginSuccess = true;
-  localStorage.removeItem('loginSuccess'); // hapus dari localStorage
-  
-  // Simpan ke sessionStorage agar survive di page ini saat refresh
-  sessionStorage.setItem('page2Accessed', 'true');
-}
+// Deteksi Instagram browser
+const isInstagram = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+};
 
-// Cek juga dari sessionStorage (untuk kasus refresh di page 2)
-if (sessionStorage.getItem('page2Accessed') === 'true') {
-  loginSuccess = true;
-}
-
-function playMusic() {
-  if (!bgMusic) {
-    console.log('Audio element tidak ditemukan');
-    return;
-  }
+// ===== FORCE PLAY UNTUK INSTAGRAM =====
+function forcePlayForInstagram() {
+  if (!isInstagram()) return false;
   
-  if (musicPlayed) {
-    console.log('Musik sudah diputar');
-    return;
-  }
+  console.log('Instagram detected, applying special fixes...');
   
-  // Reset audio jika perlu
-  bgMusic.currentTime = 0;
-  
-  bgMusic.play().then(() => {
-    musicPlayed = true;
-    console.log('Musik berjalan dengan sukses');
-  }).catch(e => {
-    console.log('Error play music:', e);
-    // Fallback: coba lagi setelah user interaction
-    if (e.name === 'NotAllowedError') {
-      console.log('Menunggu user interaction...');
+  // Method 1: Create new audio context (hack untuk Instagram)
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    
+    // Resume audio context
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().then(() => {
+        console.log('AudioContext resumed for Instagram');
+      });
     }
-  });
+  } catch(e) {
+    console.log('AudioContext not supported');
+  }
+  
+  // Method 2: Force play dengan berbagai cara
+  setTimeout(() => {
+    if (!musicPlayed && bgMusic) {
+      // Reset audio
+      bgMusic.load();
+      bgMusic.volume = 1.0;
+      
+      // Coba play dengan promise
+      const playPromise = bgMusic.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          musicPlayed = true;
+          console.log('Instagram music playing!');
+        }).catch(error => {
+          console.log('Instagram play failed:', error);
+          // Retry setelah 1 detik
+          setTimeout(() => retryPlayForInstagram(), 1000);
+        });
+      }
+    }
+  }, 500);
+  
+  return true;
 }
 
-// ===== UNTUK INSTAGRAM & BROWSER: Universal unlock =====
-function setupUniversalUnlock() {
-  // Di page 2, kita ALWAYS setup unlock untuk musik
-  // Tapi musik hanya akan diputar jika loginSuccess = true
-  // Atau langsung mainkan otomatis jika browser mengizinkan
+function retryPlayForInstagram() {
+  if (musicPlayed || instagramUnlockAttempts > 5) return;
   
-  const events = ['click', 'touchstart', 'touchend'];
+  instagramUnlockAttempts++;
+  console.log(`Retry attempt ${instagramUnlockAttempts} for Instagram`);
+  
+  if (bgMusic) {
+    bgMusic.load();
+    bgMusic.play().then(() => {
+      musicPlayed = true;
+      console.log('Instagram music success on retry!');
+    }).catch(e => {
+      console.log(`Retry ${instagramUnlockAttempts} failed`);
+      if (instagramUnlockAttempts < 5) {
+        setTimeout(() => retryPlayForInstagram(), 1500);
+      }
+    });
+  }
+}
+
+// ===== UNIVERSAL UNLOCK UNTUK SEMUA PLATFORM =====
+function setupMusicUnlock() {
+  const isIg = isInstagram();
+  
+  // Untuk Instagram: lebih agresif
+  const events = isIg ? 
+    ['click', 'touchstart', 'touchend', 'scroll', 'visibilitychange'] :
+    ['click', 'touchstart'];
+  
   let unlocked = false;
   
   function unlockMusic() {
-    if (!unlocked && bgMusic) {
-      // Coba putar musik
-      bgMusic.play().then(() => {
+    if (unlocked || !bgMusic) return;
+    
+    console.log('User interaction detected, trying to play music...');
+    
+    // Coba play dengan force
+    bgMusic.load();
+    
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
         musicPlayed = true;
         unlocked = true;
-        console.log('Musik unlocked dan berjalan');
+        console.log('Music unlocked successfully!');
         
-        // Hapus listener setelah sukses
+        // Hapus semua listener
         events.forEach(evt => {
           document.removeEventListener(evt, unlockMusic);
         });
-      }).catch(e => {
-        console.log('Gagal unlock music:', e);
+      }).catch(error => {
+        console.log('Play failed on interaction:', error);
+        
+        // Untuk Instagram, coba lagi dengan delay
+        if (isIg && !unlocked) {
+          setTimeout(() => {
+            if (!musicPlayed) {
+              bgMusic.play().catch(e => console.log('Still failing:', e));
+            }
+          }, 100);
+        }
       });
     }
   }
   
-  // Pasang listener untuk berbagai event
+  // Pasang listener
   events.forEach(evt => {
     document.addEventListener(evt, unlockMusic);
+    console.log(`Listener added for: ${evt}`);
   });
   
-  // Coba mainkan otomatis (mungkin berhasil di browser)
-  if (!musicPlayed && bgMusic) {
-    bgMusic.play().then(() => {
-      musicPlayed = true;
-      console.log('Auto-play sukses');
-    }).catch(e => {
-      console.log('Auto-play tidak diizinkan, menunggu user interaction');
-      // Jika login success, kita perlu user interaction
-      if (loginSuccess) {
-        console.log('Menunggu user klik untuk memutar musik');
+  // Untuk Instagram: coba play otomatis dengan delay
+  if (isIg) {
+    console.log('Instagram mode: aggressive auto-play attempts');
+    
+    // Attempt 1: After page load
+    setTimeout(() => {
+      if (!musicPlayed) {
+        bgMusic.load();
+        bgMusic.play().catch(e => console.log('Auto attempt 1 failed'));
       }
-    });
+    }, 1000);
+    
+    // Attempt 2: After 2 seconds
+    setTimeout(() => {
+      if (!musicPlayed) {
+        bgMusic.play().catch(e => console.log('Auto attempt 2 failed'));
+        forcePlayForInstagram();
+      }
+    }, 2000);
+    
+    // Attempt 3: Simulate click on body
+    setTimeout(() => {
+      if (!musicPlayed) {
+        document.body.click();
+      }
+    }, 3000);
+  } else {
+    // Untuk browser biasa, coba auto-play
+    if (bgMusic) {
+      bgMusic.play().then(() => {
+        musicPlayed = true;
+        console.log('Auto-play success on browser');
+      }).catch(e => console.log('Auto-play blocked, waiting for interaction'));
+    }
   }
 }
 
@@ -98,12 +171,19 @@ const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
-      // Putar musik saat klik tombol (jika belum diputar)
+      // Pastikan musik diputar
       if (!musicPlayed && bgMusic) {
+        bgMusic.load();
         bgMusic.play().then(() => {
           musicPlayed = true;
-          console.log('Musik diputar dari tombol wish');
-        }).catch(e => console.log('Error play dari wish:', e));
+          console.log('Music played from wish button');
+        }).catch(e => {
+          console.log('Wish button play error:', e);
+          // Last resort for Instagram
+          if (isInstagram()) {
+            window.location.reload(); // Force reload as last resort
+          }
+        });
       }
       
       Swal.fire({
@@ -181,24 +261,33 @@ const animationTimeline = () => {
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
       if (bgMusic) {
+        bgMusic.load();
         bgMusic.currentTime = 0;
         bgMusic.play().then(() => {
           musicPlayed = true;
-          console.log('Musik replay');
-        }).catch(e => console.log('Error replay:', e));
+          console.log('Replay music');
+        }).catch(e => console.log('Replay error:', e));
       }
       tl.restart();
     });
   }
 };
 
+// ===== VISIBILITY API UNTUK INSTAGRAM =====
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && isInstagram() && !musicPlayed && bgMusic) {
+    console.log('Page visible again, trying to play');
+    bgMusic.play().catch(e => console.log('Visibility play failed'));
+  }
+});
+
 // ===== LOAD =====
 window.addEventListener("load", () => {
-  console.log('Page loaded, loginSuccess:', loginSuccess);
+  console.log('Page loaded, platform:', isInstagram() ? 'Instagram' : 'Browser');
   
   animationTimeline();
   setupWishButton();
-  setupUniversalUnlock(); // Universal unlock untuk semua platform
+  setupMusicUnlock();
 });
 
 // Prevent context menu & double click
