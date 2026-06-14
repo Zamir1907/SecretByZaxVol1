@@ -6,12 +6,14 @@
   -webkit-touch-callout: none;
 }
 
+/* Biarkan form login tetap bisa diketik */
 input[type="text"],
 input[type="password"] {
   -webkit-user-select: text;
   user-select: text;
 }
 
+/* HILANGKAN SCROLLBAR */
 html, body {
   margin: 0;
   padding: 0;
@@ -45,7 +47,7 @@ body {
   --border: rgba(232, 201, 127, 0.25);
 }
 
-/* ===== LOGIN PAGE ===== */
+/* ===== LOGIN PAGE (RESPONSIF) ===== */
 .login_container {
   display: flex;
   flex-direction: column;
@@ -174,6 +176,7 @@ button[type="submit"]:hover {
   position: absolute;
 }
 
+/* ===== TEKS RESPONSIF ===== */
 .one {
   font-size: clamp(2rem, 8vw, 4.5rem);
   color: var(--text-light);
@@ -279,6 +282,7 @@ button[type="submit"]:hover {
   display: inline-block;
 }
 
+/* ===== IDEA-6 (J A D I) BESAR ===== */
 .idea-6 {
   text-align: center !important;
   width: 100% !important;
@@ -288,12 +292,70 @@ button[type="submit"]:hover {
 }
 
 .idea-6 span {
-  font-size: clamp(2.5rem, 10vw, 6rem) !important;
+  font-size: clamp(3rem, 12vw, 7rem) !important;
   font-weight: bold;
   color: var(--gold);
   text-shadow: 0 0 40px rgba(232, 201, 127, 0.4);
   display: inline-block;
   letter-spacing: clamp(4px, 2vw, 12px);
+}
+
+/* ===== BALON - UKURAN BESAR, POSISI RANDOM ===== */
+.seven {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ballons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.ballons img {
+  position: absolute;
+  bottom: -80px;
+  width: auto;
+  height: auto;
+  max-width: 75px;
+  animation: floatBalloon 5s ease-in forwards;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Balon lebih besar di HP */
+@media (max-width: 768px) {
+  .ballons img {
+    max-width: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ballons img {
+    max-width: 60px;
+  }
+}
+
+@keyframes floatBalloon {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-60vh) rotate(8deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) rotate(15deg);
+    opacity: 0;
+  }
 }
 
 /* ===== FOTO & TOPI ===== */
@@ -320,12 +382,13 @@ button[type="submit"]:hover {
   margin: 0 auto;
 }
 
+/* TOPI - Desktop (posisi miring ke kiri) */
 .six .hat {
   position: absolute;
   top: -75px;
   left: 41%;
   transform: translateX(-50%) rotate(-22deg) !important;
-  width: 70px;
+  width: 75px;
   height: auto;
   background: none !important;
   box-shadow: none !important;
@@ -334,10 +397,11 @@ button[type="submit"]:hover {
   pointer-events: none;
 }
 
+/* TOPI - HP */
 @media (max-width: 768px) {
   .six .hat {
-    width: 50px;
-    top: -45px;
+    width: 55px;
+    top: -48px;
     left: 43%;
     transform: translateX(-50%) rotate(-18deg) !important;
   }
@@ -345,8 +409,8 @@ button[type="submit"]:hover {
 
 @media (max-width: 480px) {
   .six .hat {
-    width: 40px;
-    top: -35px;
+    width: 45px;
+    top: -38px;
     left: 44%;
     transform: translateX(-50%) rotate(-15deg) !important;
   }
@@ -363,6 +427,7 @@ button[type="submit"]:hover {
   stroke-width: 0 !important;
 }
 
+/* ===== WISH TEXT ===== */
 .wish {
   width: 100%;
   max-width: min(550px, 90%);
@@ -395,72 +460,7 @@ button[type="submit"]:hover {
   height: auto !important;
 }
 
-/* ===== BALON - UKURAN BESAR & HANYA DI AWAL ===== */
-.seven {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.ballons {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 5;
-  animation: fadeOutBalloons 0.5s forwards;
-  animation-delay: 8s; /* Balon ilang setelah 8 detik */
-  animation-fill-mode: forwards;
-}
-
-@keyframes fadeOutBalloons {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    display: none;
-  }
-}
-
-.ballons img {
-  position: absolute;
-  bottom: -50px;
-  width: auto;
-  height: auto;
-  max-width: 80px; /* Ukuran default lebih besar */
-  animation: floatBalloon 6s ease-in forwards;
-  pointer-events: none;
-  opacity: 0.9;
-}
-
-/* HP: balon lebih besar lagi */
-@media (max-width: 768px) {
-  .ballons img {
-    max-width: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .ballons img {
-    max-width: 60px;
-  }
-}
-
-@keyframes floatBalloon {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-120vh) rotate(15deg);
-    opacity: 0;
-  }
-}
-
-/* ===== LINGKARAN MUTER ===== */
+/* ===== LINGKARAN MUTER (BULAT) ===== */
 .eight svg {
   position: absolute;
   width: 30px !important;
@@ -471,8 +471,8 @@ button[type="submit"]:hover {
 
 @media (max-width: 768px) {
   .eight svg {
-    width: 20px !important;
-    height: 20px !important;
+    width: 22px !important;
+    height: 22px !important;
   }
 }
 
@@ -486,19 +486,19 @@ button[type="submit"]:hover {
 .eight svg:nth-child(8) { fill: #8c7ae6; left: 37vw; top: 86vh; }
 .eight svg:nth-child(9) { fill: #6fa8dc; left: 87vw; top: 94vh; }
 
-/* ===== EFEK BACKGROUND ===== */
+/* ===== EFEK BACKGROUND GLOW & PARTICLE ===== */
 .container::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(232,201,127,0.08), transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(232,201,127,0.05), transparent 55%),
-    radial-gradient(circle at 90% 20%, rgba(255,159,178,0.07), transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(232, 201, 127, 0.08), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 159, 178, 0.06), transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(232, 201, 127, 0.05), transparent 55%),
+    radial-gradient(circle at 90% 20%, rgba(255, 159, 178, 0.07), transparent 50%);
   pointer-events: none;
   z-index: 0;
-  animation: floatOrbs 25s ease-in-out infinite;
+  animation: floatOrbs 20s ease-in-out infinite;
 }
 
 @keyframes floatOrbs {
@@ -507,12 +507,31 @@ button[type="submit"]:hover {
   66% { transform: translate(-0.5%, 1%) scale(0.98); opacity: 0.9; }
 }
 
-/* Sembunyikan nine */
+/* Lingkaran glow di sekitar foto */
+.six::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle, rgba(232, 201, 127, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: rotateGlow 12s linear infinite;
+}
+
+@keyframes rotateGlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Sembunyikan nine & replay */
 .nine p, .nine .last-smile, #replay {
   display: none;
 }
 
-/* Animasi tambahan */
+/* ===== ANIMASI LOGIN ===== */
 @keyframes floatGlow {
   0%, 100% { transform: translateY(0); text-shadow: 0 0 12px rgba(232,201,127,0.25); }
   50% { transform: translateY(-4px); text-shadow: 0 0 20px rgba(232,201,127,0.45); }
@@ -531,7 +550,7 @@ button[type="submit"]:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsif posisi konten */
+/* ===== RESPONSIF POSISI KONTEN ===== */
 @media (max-width: 768px) {
   .container {
     width: 100%;
@@ -568,22 +587,4 @@ button[type="submit"]:hover {
   .container > div {
     top: 12vh;
   }
-}
-
-.six::before {
-  content: '';
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  background: radial-gradient(circle, rgba(232,201,127,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: rotateGlow 12s linear infinite;
-}
-
-@keyframes rotateGlow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
