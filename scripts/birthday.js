@@ -121,13 +121,38 @@ const animationTimeline = () => {
     .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
     .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
     .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
-    .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4 }, 0.3);
-    // ===== BARIS DI BAWAH INI DIHAPUS =====
-    // .to(".six", 0.5, { opacity: 0, y: 30, zIndex: "-1" })  // <-- DIHAPUS biar foto tetap ada
-    // .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)        // <-- DIHAPUS karena .nine tidak ada
-    // .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8")    // <-- DIHAPUS
+    // ===== PERUBAHAN: UNLIMITED EFFECT UNTUK .eight svg =====
+    .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: -1, repeatDelay: 1.4 }, 0.3);
+    // repeat: -1 = infinite/unlimited!
+    // Baris .to(".six"...) dan .nine p sudah dihapus seperti sebelumnya
 };
 
+// ===== FUNGSI TAMBAHAN: MEMASTIKAN EIGHT TETAP MUNCUL =====
+// Opsional: tambahkan fungsi untuk membuat efek confetti terus berjalan setelah animasi selesai
+const keepEightVisible = () => {
+  // Cek setiap 5 detik apakah elemen .eight svg masih ada yang terlihat
+  // Jika perlu, restart animasinya
+  const eightSvgs = document.querySelectorAll('.eight svg');
+  if (eightSvgs.length > 0 && tl && !tl.isActive()) {
+    // Jika timeline sudah selesai, tetap buat efek looping
+    setInterval(() => {
+      eightSvgs.forEach((svg, index) => {
+        setTimeout(() => {
+          svg.style.visibility = 'visible';
+          svg.style.opacity = '1';
+          svg.style.transform = 'scale(1)';
+          setTimeout(() => {
+            svg.style.opacity = '0';
+            svg.style.transform = 'scale(80)';
+          }, 50);
+          setTimeout(() => {
+            svg.style.visibility = 'hidden';
+          }, 1500);
+        }, index * 300);
+      });
+    }, 3000);
+  }
+};
 
 // ===== LOAD EVENT =====
 window.addEventListener("load", () => {
