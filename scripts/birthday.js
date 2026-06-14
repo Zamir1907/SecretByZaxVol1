@@ -122,7 +122,10 @@ const animationTimeline = () => {
     .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
     .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
     // ===== PERUBAHAN: UNLIMITED EFFECT UNTUK .eight svg =====
- .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4 }, 0.3);
+    .staggerFromTo(".eight svg", 1.5,
+      { visibility: "visible", opacity: 1, scale: 1 },
+      { opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4, ease: Power2.easeOut },
+      0.3);
 };
   
 
