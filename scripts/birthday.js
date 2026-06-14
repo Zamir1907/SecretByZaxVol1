@@ -157,9 +157,10 @@ const animationTimeline = () => {
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
 
     // ===== .idea-5: Stagger Word Drop — per span, Back.easeOut natural =====
-.from(".idea-5", 0.7, { opacity: 0, x: -40, rotation: -3, ease: Power3.easeOut }, "+=2")
-.to(".idea-5 span", 0.5, { rotation: 15, scale: 1.2 }, "+=1.5")
-.to(".idea-5", 0.6, { opacity: 0, x: 40, rotation: 2, ease: Power2.easeIn }, "+=1.5")
+.from(".idea-5", 0.9, { opacity: 0, scale: 0.3, ease: Elastic.easeOut.config(1, 0.5) }, "+=2")
+.to(".idea-5", 0.4, { textShadow: "0 0 30px rgba(232,201,127,0.8)", ease: Power2.easeOut }, "-=0.2")
+.to(".idea-5 span", 0.7, { rotation: 90, x: 8, ease: Power2.easeOut }, "+=1.5")
+.to(".idea-5", 0.7, { opacity: 0, scale: 0.2, ease: Power3.easeIn }, "+=2.0")
 
     // ===== .idea-6 span: Scale dikurangi dari 3 → 1.5, lebih profesional =====
     .staggerFrom(".idea-6 span", 0.7, {
@@ -193,19 +194,8 @@ const animationTimeline = () => {
 .to(".hat", 0, { rotation: -22 }) // set ke posisi final CSS yang tadi kita hapus
 
     // ===== .wish-hbd span: Wave Bounce — dikurangi dari rotation:150 → 30, lebih elegan =====
-    .staggerFrom(".wish-hbd span", 0.8, {
-      opacity: 0,
-      y: -40,
-      rotation: 30,
-      skewX: "10deg",
-      ease: Back.easeOut.config(2)
-    }, 0.08)
-
-    // ===== .wish-hbd span color: subtle rotationY, lebih smooth =====
-    .staggerFromTo(".wish-hbd span", 0.7,
-      { scale: 1.3, rotationY: 90 },
-      { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut },
-      0.08, "party")
+.staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
+.staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
 
     // ===== .wish h5: clean fade in =====
     .from(".wish h5", 0.6, { opacity: 0, y: 12, ease: Power2.easeOut }, "party")
