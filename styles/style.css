@@ -551,3 +551,75 @@ button[type="submit"]:hover {
     font-size: 1.4rem;
   }
 }
+
+/* ===== EFEK FLOATING & GLOW UNTUK FOTO ===== */
+.floating-glow {
+  animation: floatGlowPhoto 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+@keyframes floatGlowPhoto {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(232, 201, 127, 0.4), 0 15px 50px rgba(0, 0, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(232, 201, 127, 0), 0 20px 60px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* Efek partikel bunga di sekitar foto */
+.six {
+  position: relative;
+  overflow: visible;
+}
+
+.six::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: radial-gradient(circle, rgba(232,201,127,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: rotateGlow 8s linear infinite;
+}
+
+@keyframes rotateGlow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Bunga/partikel berjatuhan (confetti style) */
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  font-size: 20px;
+  animation: fall linear infinite;
+}
