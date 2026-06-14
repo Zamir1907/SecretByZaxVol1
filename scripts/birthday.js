@@ -1,33 +1,30 @@
-// Birthday page scripts - PAUSE ANIMASI SAMPAI USER KLIK
+// Birthday page scripts - PAUSE SAMPAI USER KLIK OVERLAY
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 let animationStarted = false;
-let tl = null; // akan diisi timeline
+let tl = null; // Timeline GSAP
 
 function playMusic() {
   if (!bgMusic || musicPlayed) return;
   bgMusic.play().then(() => {
     musicPlayed = true;
     console.log('Musik berjalan');
-  }).catch(e => console.log('Error play:', e));
+  }).catch(e => console.log('Error play musik:', e));
 }
 
-// ===== FUNGSI UNTUK MEMULAI SEMUANYA =====
+// ===== FUNGSI MEMULAI SEMUANYA (dipanggil saat user klik overlay) =====
 function startEverything() {
   if (animationStarted) return;
   animationStarted = true;
   
-  console.log('Start everything - animation & music resume');
-  
   // Play musik
   playMusic();
   
-  // Hapus overlay dengan efek fade
+  // Hapus overlay dengan animasi fade out
   const overlay = document.getElementById('startOverlay');
   if (overlay) {
-    overlay.style.transition = 'opacity 0.5s ease';
     overlay.style.opacity = '0';
     setTimeout(() => {
       overlay.style.display = 'none';
@@ -47,7 +44,7 @@ const setupWishButton = () => {
     wishBtn.addEventListener("click", () => {
       playMusic();
       Swal.fire({
-        title: "Untuk Kamu ✨",
+        title: "✨ Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
         icon: "success",
         confirmButtonText: "Terima kasih 💫",
@@ -118,6 +115,7 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
+  // TOMBOL REPLAY
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
@@ -125,19 +123,25 @@ const animationTimeline = () => {
         bgMusic.currentTime = 0;
         bgMusic.play().then(() => {
           musicPlayed = true;
-        }).catch(() => {});
+        }).catch(e => console.log('Replay error:', e));
       }
       tl.restart();
-      tl.pause(); // pause lagi setelah restart
+      tl.pause(); // PAUSE LAGI SETELAH RESTART
+      animationStarted = false; // reset flag, perlu klik lagi
+      
+      // Munculkan overlay lagi
+      const overlay = document.getElementById('startOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+      }
     });
   }
 };
 
 // ===== LOAD =====
 window.addEventListener("load", () => {
-  console.log('Page loaded - animation paused, waiting for user click');
-  
-  // Buat animasi (dalam keadaan paused)
+  console.log('Halaman loaded - animasi dalam keadaan pause');
   animationTimeline();
   setupWishButton();
   
@@ -148,7 +152,7 @@ window.addEventListener("load", () => {
     overlay.addEventListener('touchstart', startEverything);
   }
   
-  // Hapus localStorage loginSuccess setelah dibaca
+  // Hapus localStorage loginSuccess (opsional)
   if (localStorage.getItem('loginSuccess') === 'true') {
     localStorage.removeItem('loginSuccess');
   }
