@@ -41,11 +41,7 @@ function startEverything() {
   
   const overlay = document.getElementById('startOverlay');
   if (overlay) {
-    overlay.style.opacity = '0';
-    overlay.style.transition = 'opacity 0.5s ease';
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 500);
+    overlay.classList.add('hide');
   }
   
   if (tl && tl.paused) {
@@ -144,8 +140,7 @@ const animationTimeline = () => {
       
       const overlay = document.getElementById('startOverlay');
       if (overlay) {
-        overlay.style.display = 'flex';
-        overlay.style.opacity = '1';
+        overlay.classList.remove('hide');
       }
     });
   }
@@ -158,7 +153,6 @@ window.addEventListener("load", () => {
   animationTimeline();
   setupWishButton();
   
-  // ✅ INI YANG BENAR - pasang listener ke startOverlay
   const overlay = document.getElementById('startOverlay');
   if (overlay) {
     console.log('Overlay ditemukan, memasang listener');
