@@ -122,75 +122,9 @@ const animationTimeline = () => {
     .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
     .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
     // ===== PERUBAHAN: UNLIMITED EFFECT UNTUK .eight svg =====
-.call(startConfetti, [], "+=1")
+ .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4 }, 0.3);
 };
   
-  // ===== CONFETTI EFEK DI AKHIR (UNLIMITED) =====
-function startConfetti() {
-  // Durasi panjang, interval konfeti
-  const duration = 60 * 1000; // 1 menit
-  const end = Date.now() + duration;
-  
-  const colors = ['#e8c97f', '#ff9fb2', '#8c7ae6', '#6fa8dc', '#f0b27a'];
-  
-  (function frame() {
-    canvasConfetti({
-      particleCount: 3,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.5 },
-      colors: colors
-    });
-    canvasConfetti({
-      particleCount: 3,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.5 },
-      colors: colors
-    });
-    canvasConfetti({
-      particleCount: 5,
-      spread: 100,
-      origin: { y: 0.6 },
-      startVelocity: 25,
-      colors: colors
-    });
-    
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  }());
-}
-
-// Panggil di akhir timeline
-// .call(startConfetti, [], "+=1")
-
-// ===== FUNGSI TAMBAHAN: MEMASTIKAN EIGHT TETAP MUNCUL =====
-// Opsional: tambahkan fungsi untuk membuat efek confetti terus berjalan setelah animasi selesai
-const keepEightVisible = () => {
-  // Cek setiap 5 detik apakah elemen .eight svg masih ada yang terlihat
-  // Jika perlu, restart animasinya
-  const eightSvgs = document.querySelectorAll('.eight svg');
-  if (eightSvgs.length > 0 && tl && !tl.isActive()) {
-    // Jika timeline sudah selesai, tetap buat efek looping
-    setInterval(() => {
-      eightSvgs.forEach((svg, index) => {
-        setTimeout(() => {
-          svg.style.visibility = 'visible';
-          svg.style.opacity = '1';
-          svg.style.transform = 'scale(1)';
-          setTimeout(() => {
-            svg.style.opacity = '0';
-            svg.style.transform = 'scale(80)';
-          }, 50);
-          setTimeout(() => {
-            svg.style.visibility = 'hidden';
-          }, 1500);
-        }, index * 300);
-      });
-    }, 3000);
-  }
-};
 
 // ===== LOAD EVENT =====
 window.addEventListener("load", () => {
@@ -219,45 +153,3 @@ window.addEventListener("load", () => {
 
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
-
-// ===== FORCE EIGHT APPEAR =====
-function startSimpleEightEffect() {
-  const svgs = document.querySelectorAll('.eight svg');
-  if (svgs.length === 0) return;
-  
-  // Sembunyikan semua dulu
-  svgs.forEach(svg => {
-    svg.style.visibility = 'hidden';
-    svg.style.opacity = '0';
-    svg.style.transform = 'scale(1)';
-    svg.style.transition = 'all 0.8s ease';
-  });
-  
-  // Jalankan efek berurutan, hanya 1 putaran
-  let delay = 0;
-  svgs.forEach((svg, index) => {
-    setTimeout(() => {
-      // Muncul
-      svg.style.visibility = 'visible';
-      svg.style.opacity = '1';
-      svg.style.transform = 'scale(1)';
-      
-      // Membesar dan hilang
-      setTimeout(() => {
-        svg.style.transform = 'scale(60)';
-        svg.style.opacity = '0';
-      }, 500);
-      
-      // Reset untuk yang next
-      setTimeout(() => {
-        svg.style.visibility = 'hidden';
-        svg.style.transform = 'scale(1)';
-      }, 1300);
-    }, delay);
-    delay += 400;
-  });
-}
-
-// Panggil di AKHIR animasi (setelah wish muncul)
-// Tambahkan di timeline setelah wish:
-// .call(startSimpleEightEffect, [], "+=1")
