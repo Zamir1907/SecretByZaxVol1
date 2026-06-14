@@ -190,6 +190,7 @@ const animationTimeline = () => {
       ease: Back.easeOut.config(1.2)
     }, "-=2")
     .from(".hat", 0.5, { x: -80, y: 300, rotation: -150, opacity: 0, ease: Power3.easeOut })
+.to(".hat", 0, { rotation: -22 }) // set ke posisi final CSS yang tadi kita hapus
 
     // ===== .wish-hbd span: Wave Bounce — dikurangi dari rotation:150 → 30, lebih elegan =====
     .staggerFrom(".wish-hbd span", 0.8, {
