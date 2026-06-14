@@ -1,14 +1,11 @@
-/* ===== RESET & BASE ===== */
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
+* {
   box-sizing: border-box;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
-  -webkit-tap-highlight-color: transparent;
 }
+
 
 /* Biarkan form login tetap bisa diketik */
 input[type="text"],
@@ -17,363 +14,22 @@ input[type="password"] {
   user-select: text;
 }
 
-:root {
-  --bg:       #09090f;
-  --surface:  rgba(18, 18, 28, 0.72);
-  --gold:     #e8c97f;
-  --gold-dim: rgba(232, 201, 127, 0.18);
-  --text:     #ece8df;
-  --muted:    rgba(236, 232, 223, 0.45);
-  --border:   rgba(232, 201, 127, 0.14);
-  --danger:   #ff6b6b;
-  --radius:   20px;
-}
-
-/* HILANGKAN SCROLLBAR & FULLSCREEN */
+/* HILANGKAN SCROLLBAR */
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
+  overflow: hidden !important;
+  height: 100% !important;
+  width: 100% !important;
+  position: fixed !important;
+  top: 0;
+  left: 0;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   background: radial-gradient(circle at top, #1a1d29 0%, #0d0f14 70%);
   color: #f4f1ea;
-  min-height: 100vh;
-}
-
-/* ambient glow */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,201,127,0.07) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 30% at 80% 100%, rgba(139,92,246,0.05) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ===== CARD ===== */
-.card {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 400px;
-  background: var(--surface);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 2.4rem 2rem 2rem;
-  box-shadow:
-    0 32px 64px rgba(0,0,0,0.45),
-    0 0 0 0.5px rgba(232,201,127,0.08) inset;
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-/* ===== HEADER ===== */
-.card-header {
-  margin-bottom: 2rem;
-}
-
-.eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0.7;
-  margin-bottom: 0.55rem;
-}
-
-.card-title {
-  font-size: 1.75rem;
-  font-weight: 500;
-  color: var(--text);
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-}
-
-.card-title em {
-  font-style: normal;
-  background: linear-gradient(110deg, var(--text) 30%, var(--gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ===== FORM ===== */
-.login_form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.field {
-  position: relative;
-}
-
-.field input {
-  width: 100%;
-  background: rgba(0,0,0,0.28);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.85rem 1.1rem;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  color: var(--text);
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.field input::placeholder {
-  color: var(--muted);
-}
-
-.field input:focus {
-  border-color: rgba(232,201,127,0.5);
-  box-shadow: 0 0 0 3px rgba(232,201,127,0.08);
-}
-
-.field input.error {
-  border-color: var(--danger);
-  box-shadow: 0 0 0 3px rgba(255,107,107,0.08);
-}
-
-/* toggle password — hilangkan semua stroke/outline di HP */
-.toggle-pw {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: var(--muted);
-  transition: color 0.2s;
-  padding: 0.5rem;
-  line-height: 1;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.toggle-pw:active {
-  color: var(--gold);
-  transform: translateY(-50%) scale(0.95);
-}
-
-.toggle-pw:focus-visible {
-  outline: none;
-}
-
-/* submit */
-.btn-submit {
-  margin-top: 0.5rem;
-  width: 100%;
-  padding: 0.9rem;
-  background: linear-gradient(110deg, #e8c97f, #c9a450);
-  border: none;
-  border-radius: var(--radius);
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #0a0a0a;
-  cursor: pointer;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s, transform 0.15s;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-submit:hover  { opacity: 0.92; }
-.btn-submit:active { transform: scale(0.98); }
-.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* error hint */
-.form-error {
-  font-size: 0.72rem;
-  color: var(--danger);
-  margin-top: 0.4rem;
-  padding-left: 0.2rem;
-  min-height: 1rem;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.form-error.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===== HINT POPOVER ===== */
-.hint-wrap {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-}
-
-.hint-container {
-  position: relative;
-  display: inline-flex;
-  justify-content: center;
-}
-
-.hint-trigger {
-  background: none;
-  border: none;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.72rem;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0.5rem 0.8rem;
-  border-radius: 40px;
-  transition: all 0.2s ease;
-  letter-spacing: 0.02em;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.hint-trigger:active {
-  transform: scale(0.96);
-  color: var(--gold);
-}
-
-.hint-popover {
-  position: absolute;
-  bottom: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  background: rgba(12, 12, 20, 0.97);
-  border: 1px solid rgba(232,201,127,0.18);
-  border-radius: 20px;
-  padding: 0.9rem 1rem;
-  width: 220px;
-  box-shadow: 0 20px 48px rgba(0,0,0,0.55);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 20;
-  backdrop-filter: blur(4px);
-}
-
-.hint-popover.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
-}
-
-.hint-popover-label {
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--gold);
-  opacity: 0.65;
-  margin-bottom: 0.65rem;
-  font-family: 'DM Mono', monospace;
-}
-
-.hint-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.55rem 0.4rem;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background 0.15s;
-  border-bottom: 1px solid rgba(232,201,127,0.06);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.hint-row:last-of-type { border-bottom: none; }
-.hint-row:active { background: rgba(232,201,127,0.1); transform: scale(0.98); }
-
-.hint-row-left { display: flex; flex-direction: column; gap: 2px; }
-
-.hint-row-type {
-  font-size: 0.56rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.hint-row-value {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--text);
-}
-
-.hint-copy-icon {
-  font-size: 0.8rem;
-  opacity: 0.4;
-  transition: opacity 0.15s;
-}
-
-/* panah bawah popover */
-.hint-arrow {
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 9px;
-  height: 9px;
-  background: rgba(12,12,20,0.97);
-  border-right: 1px solid rgba(232,201,127,0.18);
-  border-bottom: 1px solid rgba(232,201,127,0.18);
-}
-
-/* toast copy */
-.copy-toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background: rgba(232,201,127,0.96);
-  color: #0a0a0a;
-  font-size: 0.72rem;
-  font-weight: 600;
-  font-family: 'DM Mono', monospace;
-  padding: 0.5rem 1.1rem;
-  border-radius: 40px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.18s, transform 0.18s;
-  z-index: 100;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-.copy-toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 420px) {
-  .card {
-    padding: 2rem 1.5rem 1.75rem;
-    border-radius: 24px;
-  }
-  .card-title { font-size: 1.5rem; }
-  
-  .toggle-pw {
-    padding: 0.4rem;
-    right: 0.7rem;
-  }
-  
-  .hint-trigger {
-    font-size: 0.7rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card { transition: none; }
 }
 
 /* Warna teks tombol SweetAlert jadi hitam */
@@ -382,15 +38,14 @@ body::after {
   font-weight: 600 !important;
 }
 
-/* ===== EXTRA COLOR VARIABLES (Birthday Page) ===== */
 :root {
   --bg-dark: #0d0f14;
   --bg-card: #181b24;
+  --gold: #e8c97f;
   --gold-soft: #f5e3b3;
   --text-light: #f4f1ea;
   --text-muted: #a9adc1;
   --accent: #ff9fb2;
-  /* --border override untuk birthday page — lebih terang */
   --border: rgba(232, 201, 127, 0.25);
 }
 
@@ -522,7 +177,6 @@ button[type="submit"]:hover {
   right: 0;
   top: 20vh;
   position: absolute;
-  z-index: 2;
 }
 
 .one {
@@ -662,13 +316,12 @@ button[type="submit"]:hover {
 .six {
   position: relative;
   top: 8vh;
-  z-index: 2;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  overflow: visible;
 }
 
 .six img.profile-picture {
@@ -799,7 +452,7 @@ button[type="submit"]:hover {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   overflow: visible;
 }
 
@@ -811,7 +464,7 @@ button[type="submit"]:hover {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   /* transition dihapus: konflik dengan GSAP */
 }
 
@@ -964,7 +617,11 @@ button[type="submit"]:hover {
   }
 }
 
-/* overflow: visible sudah diset di .six di atas */
+/* Efek partikel bunga di sekitar foto */
+.six {
+  position: relative;
+  overflow: visible;
+}
 
 /* Efek partikel bunga di sekitar foto - COMMENT DULU BUAT TEST */
 .six::before {
@@ -1010,10 +667,34 @@ button[type="submit"]:hover {
   animation: fall linear infinite;
 }
 
-/* .six::before z-index sudah diset di dalam block-nya */
+/* TURUNKAN Z-INDEX EFEK GLOW BIAR GA NUTUPIN */
+.six::before {
+  z-index: 0 !important;
+}
 
-/* .eight dan .eight svg sudah diset di atas */
+.container::before {
+  z-index: 0 !important;
+}
 
-/* .six z-index dan position sudah diset di atas */
+/* .eight di belakang konten, konten utama di atas */
+.eight {
+  z-index: 0 !important;
+  position: fixed !important;
+  pointer-events: none;
+}
 
-/* .container > div z-index sudah diset di atas */
+.eight svg {
+  z-index: 0 !important;
+  position: absolute !important;
+}
+
+/* PASTIKAN SIX DAN KONTEN UTAMA DI DEPAN .eight */
+.six {
+  z-index: 2;
+  position: relative;
+}
+
+.container > div {
+  z-index: 2;
+  position: absolute;
+}
