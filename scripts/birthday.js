@@ -188,84 +188,43 @@ document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
 
 // ===== FORCE EIGHT APPEAR =====
-function forceEightAppear() {
-  console.log('Memaksa eight muncul...');
+function startSimpleEightEffect() {
+  const svgs = document.querySelectorAll('.eight svg');
+  if (svgs.length === 0) return;
   
-  // Buat ulang elemen eight secara manual
-  const eightContainer = document.querySelector('.eight');
-  if (!eightContainer) {
-    console.log('Eight tidak ditemukan, buat baru');
-    const newEight = document.createElement('div');
-    newEight.className = 'eight';
-    newEight.style.position = 'fixed';
-    newEight.style.top = '0';
-    newEight.style.left = '0';
-    newEight.style.width = '100%';
-    newEight.style.height = '100%';
-    newEight.style.zIndex = '999999';
-    newEight.style.pointerEvents = 'none';
-    
-    // Buat 9 SVG
-    const colors = ['#e8c97f', '#ff9fb2', '#8c7ae6', '#6fa8dc', '#f0b27a'];
-    const positions = [
-      { left: '5%', top: '7%' }, { left: '35%', top: '23%' },
-      { left: '23%', top: '33%' }, { left: '57%', top: '43%' },
-      { left: '7%', top: '68%' }, { left: '77%', top: '42%' },
-      { left: '83%', top: '68%' }, { left: '37%', top: '86%' },
-      { left: '87%', top: '94%' }
-    ];
-    
-    for (let i = 0; i < 9; i++) {
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('viewBox', '0 0 40 40');
-      svg.style.width = '25px';
-      svg.style.height = '25px';
-      svg.style.position = 'absolute';
-      svg.style.left = positions[i].left;
-      svg.style.top = positions[i].top;
-      svg.style.fill = colors[i % colors.length];
-      svg.style.opacity = '0';
-      svg.style.visibility = 'visible';
-      svg.style.zIndex = '999999';
-      
-      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute('cx', '20');
-      circle.setAttribute('cy', '20');
-      circle.setAttribute('r', '20');
-      svg.appendChild(circle);
-      newEight.appendChild(svg);
-    }
-    document.body.appendChild(newEight);
-  }
+  // Sembunyikan semua dulu
+  svgs.forEach(svg => {
+    svg.style.visibility = 'hidden';
+    svg.style.opacity = '0';
+    svg.style.transform = 'scale(1)';
+    svg.style.transition = 'all 0.8s ease';
+  });
   
-  // Force munculin semua SVG
-  setTimeout(() => {
-    const allSvgs = document.querySelectorAll('.eight svg');
-    console.log('Ditemukan', allSvgs.length, 'SVG');
-    
-    allSvgs.forEach((svg, index) => {
+  // Jalankan efek berurutan, hanya 1 putaran
+  let delay = 0;
+  svgs.forEach((svg, index) => {
+    setTimeout(() => {
+      // Muncul
       svg.style.visibility = 'visible';
       svg.style.opacity = '1';
-      svg.style.zIndex = '999999';
+      svg.style.transform = 'scale(1)';
       
-      // Animasi manual
-      setInterval(() => {
+      // Membesar dan hilang
+      setTimeout(() => {
+        svg.style.transform = 'scale(60)';
+        svg.style.opacity = '0';
+      }, 500);
+      
+      // Reset untuk yang next
+      setTimeout(() => {
+        svg.style.visibility = 'hidden';
         svg.style.transform = 'scale(1)';
-        svg.style.opacity = '1';
-        
-        setTimeout(() => {
-          svg.style.transform = 'scale(80)';
-          svg.style.opacity = '0';
-        }, 200);
-        
-        setTimeout(() => {
-          svg.style.transform = 'scale(1)';
-          svg.style.opacity = '1';
-        }, 800);
-      }, 2000 + (index * 200));
-    });
-  }, 1000);
+      }, 1300);
+    }, delay);
+    delay += 400;
+  });
 }
 
-// Panggil setelah halaman load
-setTimeout(forceEightAppear, 5000);
+// Panggil di AKHIR animasi (setelah wish muncul)
+// Tambahkan di timeline setelah wish:
+// .call(startSimpleEightEffect, [], "+=1")
