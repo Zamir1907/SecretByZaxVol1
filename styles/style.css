@@ -426,25 +426,6 @@ button[type="submit"]:hover {
   }
 }
 
-/* HP: perkecil balon sekitar 1% dari ukuran aslinya (dengan max-width) */
-@media (max-width: 768px) {
-  .ballons img {
-    max-width: 11vw;
-    transform: scale(0.99);
-  }
-}
-
-.ballons img:nth-child(even) {
-  left: -10%;
-}
-
-.ballons img:nth-child(odd) {
-  right: -10%;
-}
-
-.ballons img:nth-child(3n + 0) {
-  left: 30%;
-}
 
 .seven .eight {
   height: 100vh;
