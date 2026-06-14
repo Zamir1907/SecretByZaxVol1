@@ -1,56 +1,34 @@
-// Birthday page scripts - Version Fixed Music
+// Birthday page scripts - Fixed Music
 
 // ===== SETUP MUSIK =====
-const audioSrc = document.getElementById('bgMusicSrc')?.textContent.trim();
-const bgMusic = audioSrc ? new Audio(audioSrc) : null;
-if (bgMusic) {
-  bgMusic.loop = true;
-}
-
+// Langsung ambil elemen <audio id="bgMusic"> - lebih reliable dari textContent
+const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 
 function playMusic() {
-  if (bgMusic && bgMusic.paused && !musicPlayed) {
+  if (!bgMusic) return;
+  if (!musicPlayed) {
     bgMusic.play().then(() => {
       musicPlayed = true;
-    }).catch(e => console.log('Play error:', e));
+    }).catch(e => {
+      // Instagram/WebView block autoplay - akan dicoba lagi saat event berikutnya
+      console.log('Audio blocked, will retry on next interaction:', e.message);
+    });
   }
 }
 
-// ===== CEK LOGIN - Support localStorage DAN sessionStorage DAN fallback =====
-function isLoggedIn() {
-  // Coba localStorage dulu
-  try {
-    if (localStorage.getItem('loginSuccess') === 'true') return true;
-  } catch(e) {}
-  // Fallback ke sessionStorage (Instagram browser pakai ini)
-  try {
-    if (sessionStorage.getItem('loginSuccess') === 'true') return true;
-  } catch(e) {}
-  // Fallback ke cookie
-  try {
-    if (document.cookie.includes('loginSuccess=true')) return true;
-  } catch(e) {}
-  return false;
-}
-
-function clearLoginFlag() {
-  try { localStorage.removeItem('loginSuccess'); } catch(e) {}
-  try { sessionStorage.removeItem('loginSuccess'); } catch(e) {}
-  try { document.cookie = 'loginSuccess=; max-age=0'; } catch(e) {}
-}
-
-// ===== MUSIK: NYALA SAAT INTERAKSI PERTAMA APAPUN =====
-// Tidak peduli login atau tidak, selama halaman birthday dibuka, musik nyala saat klik/touch
-const unlockMusic = () => {
-  playMusic();
-  // Jangan langsung remove - biarkan beberapa kali trigger untuk Instagram browser
-};
-
-document.addEventListener('click', unlockMusic);
-document.addEventListener('touchstart', unlockMusic);
-document.addEventListener('touchend', unlockMusic);
-document.addEventListener('keydown', unlockMusic);
+// ===== UNLOCK MUSIK: pasang di banyak event supaya Instagram browser juga kena =====
+['click','touchstart','touchend','keydown','scroll','pointerdown'].forEach(evt => {
+  document.addEventListener(evt, function handler() {
+    playMusic();
+    // Kalau sudah berhasil, lepas semua listener supaya tidak boros
+    if (musicPlayed) {
+      ['click','touchstart','touchend','keydown','scroll','pointerdown'].forEach(e => {
+        document.removeEventListener(e, handler);
+      });
+    }
+  });
+});
 
 // ===== SETUP TOMBOL WISH =====
 const setupWishButton = () => {
@@ -77,29 +55,16 @@ const animationTimeline = () => {
 
   if (textBoxChars) {
     textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-      .split("")
-      .join("</span><span>")}</span>`;
+      .split("").join("</span><span>")}</span>`;
   }
 
   if (hbd) {
     hbd.innerHTML = `<span>${hbd.innerHTML
-      .split("")
-      .join("</span><span>")}</span>`;
+      .split("").join("</span><span>")}</span>`;
   }
 
-  const ideaTextTrans = {
-    opacity: 0,
-    y: -20,
-    rotationX: 5,
-    skewX: "15deg",
-  };
-
-  const ideaTextTransLeave = {
-    opacity: 0,
-    y: 20,
-    rotationY: 5,
-    skewY: "-15deg",
-  };
+  const ideaTextTrans      = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
+  const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
 
   const tl = new TimelineMax();
 
@@ -140,26 +105,24 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
-  // Restart
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
+      musicPlayed = false;
       if (bgMusic) {
         bgMusic.currentTime = 0;
-        bgMusic.play().catch(() => console.log("Audio play di-block"));
+        bgMusic.play().catch(() => {});
       }
       tl.restart();
     });
   }
 };
 
-// ===== LOAD EVENT =====
+// ===== LOAD =====
 window.addEventListener("load", () => {
   animationTimeline();
   setupWishButton();
-  clearLoginFlag();
 });
 
-// Disable right click & double click
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('dblclick', event => event.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dblclick', e => e.preventDefault());
