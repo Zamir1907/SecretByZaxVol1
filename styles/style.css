@@ -325,9 +325,9 @@ button[type="submit"]:hover {
 /* TOPI - DEKAT DENGAN FOTO */
 .six .hat {
   position: absolute;
-  top: -59px;
-  left: 25%;
-  transform: translateX(-50%) rotate(-15deg) !important;
+  top: -64px;
+  left: 35%;
+  transform: translateX(-50%) rotate(-22deg) !important;
   width: 70px;
   height: auto;
   background: none !important;
