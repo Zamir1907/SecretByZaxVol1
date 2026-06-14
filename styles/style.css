@@ -361,8 +361,8 @@ button[type="submit"]:hover {
 /* HP: posisi sesuai permintaan */
 @media (max-width: 768px) {
   .six .hat {
-    top: -82px !important;
-    left: 37% !important;
+    top: -78px !important;
+    left: 34% !important;
     transform: translateX(-50%) rotate(-22deg) !important;
     width: min(60px, 15vw);
   }
