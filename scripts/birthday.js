@@ -1,7 +1,6 @@
 // Birthday page scripts - Fixed Music
 
 // ===== SETUP MUSIK =====
-// Langsung ambil elemen <audio id="bgMusic"> - lebih reliable dari textContent
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 
@@ -11,23 +10,26 @@ function playMusic() {
     bgMusic.play().then(() => {
       musicPlayed = true;
     }).catch(e => {
-      // Instagram/WebView block autoplay - akan dicoba lagi saat event berikutnya
       console.log('Audio blocked, will retry on next interaction:', e.message);
     });
   }
 }
 
 // ===== UNLOCK MUSIK: pasang di banyak event supaya Instagram browser juga kena =====
-['click','touchstart','touchend','keydown','scroll','pointerdown'].forEach(evt => {
-  document.addEventListener(evt, function handler() {
-    playMusic();
-    // Kalau sudah berhasil, lepas semua listener supaya tidak boros
-    if (musicPlayed) {
-      ['click','touchstart','touchend','keydown','scroll','pointerdown'].forEach(e => {
-        document.removeEventListener(e, handler);
-      });
-    }
-  });
+const events = ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'pointerdown'];
+
+function unlockMusicHandler() {
+  playMusic();
+  if (musicPlayed) {
+    // Hapus semua listener setelah musik berhasil diputar
+    events.forEach(evt => {
+      document.removeEventListener(evt, unlockMusicHandler);
+    });
+  }
+}
+
+events.forEach(evt => {
+  document.addEventListener(evt, unlockMusicHandler);
 });
 
 // ===== SETUP TOMBOL WISH =====
@@ -55,15 +57,17 @@ const animationTimeline = () => {
 
   if (textBoxChars) {
     textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-      .split("").join("</span><span>")}</span>`;
+      .split("")
+      .join("</span><span>")}</span>`;
   }
 
   if (hbd) {
     hbd.innerHTML = `<span>${hbd.innerHTML
-      .split("").join("</span><span>")}</span>`;
+      .split("")
+      .join("</span><span>")}</span>`;
   }
 
-  const ideaTextTrans      = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
+  const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
   const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
 
   const tl = new TimelineMax();
@@ -105,13 +109,19 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
+  // ===== RESTART ANIMATION & MUSIC =====
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
-      musicPlayed = false;
+      // Reset musik
       if (bgMusic) {
+        bgMusic.pause();
         bgMusic.currentTime = 0;
-        bgMusic.play().catch(() => {});
+        musicPlayed = false; // reset flag
+        // Coba play lagi (butuh interaksi user)
+        bgMusic.play().then(() => {
+          musicPlayed = true;
+        }).catch(() => {});
       }
       tl.restart();
     });
