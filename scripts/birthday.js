@@ -1,36 +1,41 @@
-// Birthday page scripts - Fixed Music
+// Birthday page scripts - VERSION PAUSE SAMPAI USER KLIK
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
+let animationStarted = false;
+let tl = null; // akan diisi timeline
 
 function playMusic() {
-  if (!bgMusic) return;
-  if (!musicPlayed) {
-    bgMusic.play().then(() => {
-      musicPlayed = true;
-    }).catch(e => {
-      console.log('Audio blocked, will retry on next interaction:', e.message);
-    });
-  }
+  if (!bgMusic || musicPlayed) return;
+  bgMusic.play().then(() => {
+    musicPlayed = true;
+    console.log('Musik berjalan');
+  }).catch(e => console.log('Error play:', e));
 }
 
-// ===== UNLOCK MUSIK: pasang di banyak event supaya Instagram browser juga kena =====
-const events = ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'pointerdown'];
-
-function unlockMusicHandler() {
+// ===== FUNGSI UNTUK MEMULAI SEMUANYA =====
+function startEverything() {
+  if (animationStarted) return;
+  animationStarted = true;
+  
+  // Play musik
   playMusic();
-  if (musicPlayed) {
-    // Hapus semua listener setelah musik berhasil diputar
-    events.forEach(evt => {
-      document.removeEventListener(evt, unlockMusicHandler);
-    });
+  
+  // Hapus overlay
+  const overlay = document.getElementById('startOverlay');
+  if (overlay) {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 500);
+  }
+  
+  // Resume animasi GSAP (dari posisi pause)
+  if (tl && tl.paused) {
+    tl.resume();
   }
 }
-
-events.forEach(evt => {
-  document.addEventListener(evt, unlockMusicHandler);
-});
 
 // ===== SETUP TOMBOL WISH =====
 const setupWishButton = () => {
@@ -50,7 +55,7 @@ const setupWishButton = () => {
   }
 };
 
-// ===== ANIMATION TIMELINE =====
+// ===== ANIMATION TIMELINE (DI PAUSE AWAL) =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
@@ -70,7 +75,8 @@ const animationTimeline = () => {
   const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
   const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
 
-  const tl = new TimelineMax();
+  // BUAT TIMELINE (AWALNYA DI-PAUSE)
+  tl = new TimelineMax({ paused: true });
 
   tl.to(".container", 0.6, { visibility: "visible" })
     .from(".one", 0.7, { opacity: 0, y: 10 })
@@ -109,21 +115,15 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
-  // ===== RESTART ANIMATION & MUSIC =====
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
-      // Reset musik
       if (bgMusic) {
-        bgMusic.pause();
         bgMusic.currentTime = 0;
-        musicPlayed = false; // reset flag
-        // Coba play lagi (butuh interaksi user)
-        bgMusic.play().then(() => {
-          musicPlayed = true;
-        }).catch(() => {});
+        bgMusic.play().catch(() => {});
       }
       tl.restart();
+      tl.pause(); // pause lagi setelah restart
     });
   }
 };
@@ -132,7 +132,19 @@ const animationTimeline = () => {
 window.addEventListener("load", () => {
   animationTimeline();
   setupWishButton();
+  
+  // Pasang listener untuk overlay
+  const overlay = document.getElementById('startOverlay');
+  if (overlay) {
+    overlay.addEventListener('click', startEverything);
+    overlay.addEventListener('touchstart', startEverything);
+  }
 });
+
+// Hapus localStorage loginSuccess setelah dibaca (opsional)
+if (localStorage.getItem('loginSuccess') === 'true') {
+  localStorage.removeItem('loginSuccess');
+}
 
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
