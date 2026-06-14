@@ -410,20 +410,24 @@ button[type="submit"]:hover {
   height: auto !important;
 }
 
-/* BALON - ukuran sedikit lebih kecil di HP (opsional kecilin 1%) */
+/* BALON - ukuran normal semua device */
 .ballons img {
   display: inline-block;
   position: absolute;
   width: auto;
   height: auto;
-  max-width: 12vw;
 }
 
-/* Desktop: ukuran balon normal */
-@media (min-width: 769px) {
-  .ballons img {
-    max-width: none;
-  }
+.ballons img:nth-child(even) {
+  left: -10%;
+}
+
+.ballons img:nth-child(odd) {
+  right: -10%;
+}
+
+.ballons img:nth-child(3n + 0) {
+  left: 30%;
 }
 
 
