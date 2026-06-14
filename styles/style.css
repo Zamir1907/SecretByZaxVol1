@@ -352,8 +352,8 @@ button[type="submit"]:hover {
 /* Desktop: posisi default */
 @media (min-width: 769px) {
   .six .hat {
-    top: -75px;
-    left: 41%;
+    top: -79px;
+    left: 39%;
     transform: translateX(-50%) rotate(-22deg) !important;
   }
 }
@@ -361,8 +361,8 @@ button[type="submit"]:hover {
 /* HP: posisi sesuai permintaan */
 @media (max-width: 768px) {
   .six .hat {
-    top: -73px !important;
-    left: 30% !important;
+    top: -68px !important;
+    left: 28% !important;
     transform: translateX(-50%) rotate(-22deg) !important;
     width: min(60px, 15vw);
   }
