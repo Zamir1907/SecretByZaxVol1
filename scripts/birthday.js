@@ -125,7 +125,7 @@ const animationTimeline = () => {
     .set(".eight svg", { visibility: "visible" })
     .staggerFromTo(".eight svg", 1.5,
       { opacity: 1, scale: 1, immediateRender: false },
-      { opacity: 0, scale: 35, repeat: 2, repeatDelay: 1.4, ease: Power2.easeOut },
+      { opacity: 0, scale: 50, repeat: 2, repeatDelay: 1.4, ease: Power2.easeOut },
       0.3);
 };
   
