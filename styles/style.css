@@ -363,16 +363,55 @@ body {
   /* transition dihapus: konflik dengan GSAP */
 }
 
-/* Posisi masing-masing */
-.eight svg:nth-child(1) { fill: #e8c97f; left: 5vw; top: 7vh; }
-.eight svg:nth-child(2) { fill: #ff9fb2; left: 35vw; top: 23vh; }
-.eight svg:nth-child(3) { fill: #8c7ae6; left: 23vw; top: 33vh; }
-.eight svg:nth-child(4) { fill: #6fa8dc; left: 57vw; top: 43vh; }
-.eight svg:nth-child(5) { fill: #f0b27a; left: 7vw; top: 68vh; }
-.eight svg:nth-child(6) { fill: #e8c97f; left: 77vw; top: 42vh; }
-.eight svg:nth-child(7) { fill: #ff9fb2; left: 83vw; top: 68vh; }
-.eight svg:nth-child(8) { fill: #8c7ae6; left: 37vw; top: 86vh; }
-.eight svg:nth-child(9) { fill: #6fa8dc; left: 87vw; top: 94vh; }
+/* Ukuran Desktop (layar > 768px) */
+@media (min-width: 769px) {
+  .eight svg {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+/* Ukuran Tablet (768px ke bawah) */
+@media (max-width: 768px) {
+  .eight svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* Ukuran HP Kecil (480px ke bawah) */
+@media (max-width: 480px) {
+  .eight svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Posisi masing-masing SVG - RESPONSIF */
+@media (min-width: 769px) {
+  .eight svg:nth-child(1) { left: 5vw; top: 7vh; }
+  .eight svg:nth-child(2) { left: 35vw; top: 23vh; }
+  .eight svg:nth-child(3) { left: 23vw; top: 33vh; }
+  .eight svg:nth-child(4) { left: 57vw; top: 43vh; }
+  .eight svg:nth-child(5) { left: 7vw; top: 68vh; }
+  .eight svg:nth-child(6) { left: 77vw; top: 42vh; }
+  .eight svg:nth-child(7) { left: 83vw; top: 68vh; }
+  .eight svg:nth-child(8) { left: 37vw; top: 86vh; }
+  .eight svg:nth-child(9) { left: 87vw; top: 94vh; }
+}
+
+/* Posisi di HP - lebih rapat */
+@media (max-width: 768px) {
+  .eight svg:nth-child(1) { left: 3vw; top: 5vh; }
+  .eight svg:nth-child(2) { left: 30vw; top: 20vh; }
+  .eight svg:nth-child(3) { left: 20vw; top: 30vh; }
+  .eight svg:nth-child(4) { left: 55vw; top: 40vh; }
+  .eight svg:nth-child(5) { left: 5vw; top: 65vh; }
+  .eight svg:nth-child(6) { left: 75vw; top: 40vh; }
+  .eight svg:nth-child(7) { left: 80vw; top: 65vh; }
+  .eight svg:nth-child(8) { left: 35vw; top: 82vh; }
+  .eight svg:nth-child(9) { left: 85vw; top: 90vh; }
+}
 
 .nine p {
   font-size: clamp(1.2rem, 5vw, 2rem);
