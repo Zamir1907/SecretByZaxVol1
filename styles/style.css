@@ -353,7 +353,7 @@ button[type="submit"]:hover {
 @media (min-width: 769px) {
   .six .hat {
     top: -79px;
-    left: 39%;
+    left: 41%;
     transform: translateX(-50%) rotate(-22deg) !important;
   }
 }
@@ -523,14 +523,15 @@ button[type="submit"]:hover {
 }
 
 .container::before {
-  content: "";
+  /* content: "";
   position: fixed;
   inset: 0;
   background:
     radial-gradient(circle at 20% 30%, rgba(232,201,127,0.06), transparent 40%),
     radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 40%);
   pointer-events: none;
-  z-index: 0;
+  z-index: 0; */
+  display: none; /* TAMBAHKAN INI */
 }
 
 /* ===== RESPONSIF HP ===== */
@@ -620,8 +621,9 @@ button[type="submit"]:hover {
   overflow: visible;
 }
 
+/* Efek partikel bunga di sekitar foto - COMMENT DULU BUAT TEST */
 .six::before {
-  content: '';
+  /* content: '';
   position: absolute;
   top: -20px;
   left: -20px;
@@ -630,7 +632,8 @@ button[type="submit"]:hover {
   background: radial-gradient(circle, rgba(232,201,127,0.1) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-  animation: rotateGlow 8s linear infinite;
+  animation: rotateGlow 8s linear infinite; */
+  display: none; /* TAMBAHKAN INI */
 }
 
 @keyframes rotateGlow {
