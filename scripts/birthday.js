@@ -1,213 +1,43 @@
-// Birthday page scripts - INSTAGRAM OPTIMIZED VERSION
-
-const startBtn = document.getElementById('startMusicBtn');
-if (startBtn) {
-  startBtn.addEventListener('click', () => {
-    if (bgMusic) {
-      bgMusic.load();
-      bgMusic.play().then(() => {
-        musicPlayed = true;
-        startBtn.style.display = 'none';
-        console.log('Music started by button');
-      }).catch(e => console.log('Button play error:', e));
-    }
-  });
-  
-  // Hide after music starts
-  const checkMusicInterval = setInterval(() => {
-    if (musicPlayed && startBtn) {
-      startBtn.style.display = 'none';
-      clearInterval(checkMusicInterval);
-    }
-  }, 500);
-}
+// Birthday page scripts - Fixed Music
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
-let instagramUnlockAttempts = 0;
 
-// Deteksi Instagram browser
-const isInstagram = () => {
-  const ua = navigator.userAgent || navigator.vendor || window.opera;
-  return (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
-};
-
-// ===== FORCE PLAY UNTUK INSTAGRAM =====
-function forcePlayForInstagram() {
-  if (!isInstagram()) return false;
-  
-  console.log('Instagram detected, applying special fixes...');
-  
-  // Method 1: Create new audio context (hack untuk Instagram)
-  try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioCtx = new AudioContext();
-    
-    // Resume audio context
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume().then(() => {
-        console.log('AudioContext resumed for Instagram');
-      });
-    }
-  } catch(e) {
-    console.log('AudioContext not supported');
-  }
-  
-  // Method 2: Force play dengan berbagai cara
-  setTimeout(() => {
-    if (!musicPlayed && bgMusic) {
-      // Reset audio
-      bgMusic.load();
-      bgMusic.volume = 1.0;
-      
-      // Coba play dengan promise
-      const playPromise = bgMusic.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          musicPlayed = true;
-          console.log('Instagram music playing!');
-        }).catch(error => {
-          console.log('Instagram play failed:', error);
-          // Retry setelah 1 detik
-          setTimeout(() => retryPlayForInstagram(), 1000);
-        });
-      }
-    }
-  }, 500);
-  
-  return true;
-}
-
-function retryPlayForInstagram() {
-  if (musicPlayed || instagramUnlockAttempts > 5) return;
-  
-  instagramUnlockAttempts++;
-  console.log(`Retry attempt ${instagramUnlockAttempts} for Instagram`);
-  
-  if (bgMusic) {
-    bgMusic.load();
+function playMusic() {
+  if (!bgMusic) return;
+  if (!musicPlayed) {
     bgMusic.play().then(() => {
       musicPlayed = true;
-      console.log('Instagram music success on retry!');
     }).catch(e => {
-      console.log(`Retry ${instagramUnlockAttempts} failed`);
-      if (instagramUnlockAttempts < 5) {
-        setTimeout(() => retryPlayForInstagram(), 1500);
-      }
+      console.log('Audio blocked, will retry on next interaction:', e.message);
     });
   }
 }
 
-// ===== UNIVERSAL UNLOCK UNTUK SEMUA PLATFORM =====
-function setupMusicUnlock() {
-  const isIg = isInstagram();
-  
-  // Untuk Instagram: lebih agresif
-  const events = isIg ? 
-    ['click', 'touchstart', 'touchend', 'scroll', 'visibilitychange'] :
-    ['click', 'touchstart'];
-  
-  let unlocked = false;
-  
-  function unlockMusic() {
-    if (unlocked || !bgMusic) return;
-    
-    console.log('User interaction detected, trying to play music...');
-    
-    // Coba play dengan force
-    bgMusic.load();
-    
-    const playPromise = bgMusic.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        musicPlayed = true;
-        unlocked = true;
-        console.log('Music unlocked successfully!');
-        
-        // Hapus semua listener
-        events.forEach(evt => {
-          document.removeEventListener(evt, unlockMusic);
-        });
-      }).catch(error => {
-        console.log('Play failed on interaction:', error);
-        
-        // Untuk Instagram, coba lagi dengan delay
-        if (isIg && !unlocked) {
-          setTimeout(() => {
-            if (!musicPlayed) {
-              bgMusic.play().catch(e => console.log('Still failing:', e));
-            }
-          }, 100);
-        }
-      });
-    }
-  }
-  
-  // Pasang listener
-  events.forEach(evt => {
-    document.addEventListener(evt, unlockMusic);
-    console.log(`Listener added for: ${evt}`);
-  });
-  
-  // Untuk Instagram: coba play otomatis dengan delay
-  if (isIg) {
-    console.log('Instagram mode: aggressive auto-play attempts');
-    
-    // Attempt 1: After page load
-    setTimeout(() => {
-      if (!musicPlayed) {
-        bgMusic.load();
-        bgMusic.play().catch(e => console.log('Auto attempt 1 failed'));
-      }
-    }, 1000);
-    
-    // Attempt 2: After 2 seconds
-    setTimeout(() => {
-      if (!musicPlayed) {
-        bgMusic.play().catch(e => console.log('Auto attempt 2 failed'));
-        forcePlayForInstagram();
-      }
-    }, 2000);
-    
-    // Attempt 3: Simulate click on body
-    setTimeout(() => {
-      if (!musicPlayed) {
-        document.body.click();
-      }
-    }, 3000);
-  } else {
-    // Untuk browser biasa, coba auto-play
-    if (bgMusic) {
-      bgMusic.play().then(() => {
-        musicPlayed = true;
-        console.log('Auto-play success on browser');
-      }).catch(e => console.log('Auto-play blocked, waiting for interaction'));
-    }
+// ===== UNLOCK MUSIK: pasang di banyak event supaya Instagram browser juga kena =====
+const events = ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'pointerdown'];
+
+function unlockMusicHandler() {
+  playMusic();
+  if (musicPlayed) {
+    // Hapus semua listener setelah musik berhasil diputar
+    events.forEach(evt => {
+      document.removeEventListener(evt, unlockMusicHandler);
+    });
   }
 }
+
+events.forEach(evt => {
+  document.addEventListener(evt, unlockMusicHandler);
+});
 
 // ===== SETUP TOMBOL WISH =====
 const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
-      // Pastikan musik diputar
-      if (!musicPlayed && bgMusic) {
-        bgMusic.load();
-        bgMusic.play().then(() => {
-          musicPlayed = true;
-          console.log('Music played from wish button');
-        }).catch(e => {
-          console.log('Wish button play error:', e);
-          // Last resort for Instagram
-          if (isInstagram()) {
-            window.location.reload(); // Force reload as last resort
-          }
-        });
-      }
-      
+      playMusic();
       Swal.fire({
         title: "Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
@@ -279,39 +109,30 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
+  // ===== RESTART ANIMATION & MUSIC =====
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
+      // Reset musik
       if (bgMusic) {
-        bgMusic.load();
+        bgMusic.pause();
         bgMusic.currentTime = 0;
+        musicPlayed = false; // reset flag
+        // Coba play lagi (butuh interaksi user)
         bgMusic.play().then(() => {
           musicPlayed = true;
-          console.log('Replay music');
-        }).catch(e => console.log('Replay error:', e));
+        }).catch(() => {});
       }
       tl.restart();
     });
   }
 };
 
-// ===== VISIBILITY API UNTUK INSTAGRAM =====
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden && isInstagram() && !musicPlayed && bgMusic) {
-    console.log('Page visible again, trying to play');
-    bgMusic.play().catch(e => console.log('Visibility play failed'));
-  }
-});
-
 // ===== LOAD =====
 window.addEventListener("load", () => {
-  console.log('Page loaded, platform:', isInstagram() ? 'Instagram' : 'Browser');
-  
   animationTimeline();
   setupWishButton();
-  setupMusicUnlock();
 });
 
-// Prevent context menu & double click
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
