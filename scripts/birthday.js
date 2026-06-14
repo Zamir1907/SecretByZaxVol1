@@ -164,12 +164,12 @@ window.addEventListener("load", () => {
   animationTimeline();
   setupWishButton();
   
-  // Pasang listener untuk overlay
-  const overlay = document.getElementById('startOverlay');
-  if (overlay) {
-    overlay.addEventListener('click', startEverything);
-    overlay.addEventListener('touchstart', startEverything);
-  }
+// Pasang listener untuk tombol (bukan overlay)
+const startButton = document.getElementById('startButton');
+if (startButton) {
+  startButton.addEventListener('click', startEverything);
+  startButton.addEventListener('touchstart', startEverything);
+}
   
   // Hapus localStorage setelah login sukses
   if (localStorage.getItem('loginSuccess') === 'true') {
