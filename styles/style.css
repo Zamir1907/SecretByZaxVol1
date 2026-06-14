@@ -6,7 +6,6 @@
   -webkit-touch-callout: none;
 }
 
-
 /* Biarkan form login tetap bisa diketik */
 input[type="text"],
 input[type="password"] {
@@ -58,6 +57,7 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  padding: 0 20px;
 }
 
 .login_container h2 {
@@ -66,6 +66,8 @@ body {
   margin-bottom: 30px;
   color: var(--gold-soft);
   text-shadow: 0 0 12px rgba(232, 201, 127, 0.25);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  text-align: center;
 }
 
 .login_form {
@@ -73,8 +75,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 300px;
+  width: min(400px, 90%);
+  max-width: 400px;
+  height: auto;
+  min-height: 280px;
+  padding: 30px 20px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -84,7 +89,8 @@ body {
 
 input[type="text"],
 input[type="password"] {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
@@ -109,7 +115,8 @@ input[type="password"]:focus {
 }
 
 button[type="submit"] {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: 42px;
   border: none;
   border-radius: 8px;
@@ -128,7 +135,7 @@ button[type="submit"]:hover {
 }
 
 .login_description {
-  font-size: 13px;
+  font-size: clamp(11px, 3.5vw, 13px);
   color: var(--text-muted);
   margin: 16px 0 0;
   padding: 0 10px;
@@ -137,7 +144,7 @@ button[type="submit"]:hover {
 
 .login_form input:focus {
   outline: none;
-  border-color: #e8c97f;   /* emas */
+  border-color: #e8c97f;
   box-shadow: 0 0 0 3px rgba(232, 201, 127, 0.2);
   transition: 0.2s;
 }
@@ -171,7 +178,7 @@ button[type="submit"]:hover {
 }
 
 .one {
-  font-size: 4.5rem;
+  font-size: clamp(2rem, 8vw, 4.5rem);
   color: var(--text-light);
 }
 
@@ -181,13 +188,14 @@ button[type="submit"]:hover {
 }
 
 .two {
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 3.5vw, 1.2rem);
   font-weight: 300;
   color: var(--text-muted);
+  padding: 0 20px;
 }
 
 .three {
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 6vw, 3rem);
   color: var(--gold-soft);
 }
 
@@ -197,7 +205,7 @@ button[type="submit"]:hover {
   margin: 0 auto;
   padding: 16px;
   position: relative;
-  width: 600px;
+  width: min(600px, 90%);
   background: var(--bg-card);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   color: var(--text-light);
@@ -206,6 +214,7 @@ button[type="submit"]:hover {
 .text-box p {
   margin: 0;
   text-align: left;
+  font-size: clamp(0.8rem, 3vw, 1rem);
 }
 
 .text-box span {
@@ -226,6 +235,7 @@ button[type="submit"]:hover {
   cursor: default;
   white-space: nowrap;
   transition: all 0.4s ease-in-out;
+  font-size: clamp(0.7rem, 2.5vw, 0.85rem);
 }
 
 .text-box .fake-btn.ready {
@@ -256,11 +266,12 @@ button[type="submit"]:hover {
 }
 
 .five p {
-  font-size: 2rem;
+  font-size: clamp(1rem, 4vw, 2rem);
   position: absolute;
   left: 0;
   right: 0;
   color: var(--text-light);
+  padding: 0 20px;
 }
 
 .idea-3 strong {
@@ -270,7 +281,7 @@ button[type="submit"]:hover {
 }
 
 .five .idea-5 {
-  font-size: 4rem;
+  font-size: clamp(2rem, 6vw, 4rem);
   color: var(--gold-soft);
 }
 
@@ -280,7 +291,7 @@ button[type="submit"]:hover {
   display: inline-block;
 }
 
-/* ===== PERBAIKAN IDEA-6 (SELAMAT) DI TENGAH & BESAR ===== */
+/* ===== PERBAIKAN IDEA-6 (JADI) DI TENGAH & BESAR ===== */
 .idea-6 {
   text-align: center !important;
   width: 100% !important;
@@ -290,12 +301,12 @@ button[type="submit"]:hover {
 }
 
 .idea-6 span {
-  font-size: 5rem !important;
+  font-size: clamp(2.5rem, 10vw, 6rem) !important;
   font-weight: bold;
   color: var(--gold);
   text-shadow: 0 0 40px rgba(232, 201, 127, 0.4);
   display: inline-block;
-  letter-spacing: 8px;
+  letter-spacing: clamp(4px, 2vw, 12px);
 }
 
 /* ===== PERBAIKAN FOTO & TOPI ===== */
@@ -312,9 +323,9 @@ button[type="submit"]:hover {
 
 .six img.profile-picture {
   display: block;
-  width: 280px;
-  height: 280px;
-  max-width: 80%;
+  width: min(280px, 70%);
+  height: auto;
+  aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 30px;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
@@ -322,7 +333,7 @@ button[type="submit"]:hover {
   margin: 0 auto;
 }
 
-/* TOPI - DEKAT DENGAN FOTO */
+/* TOPI - Desktop (udah kamu atur) */
 .six .hat {
   position: absolute;
   top: -75px;
@@ -337,6 +348,30 @@ button[type="submit"]:hover {
   pointer-events: none;
 }
 
+/* TOPI - HP (kecil) */
+@media (max-width: 768px) {
+  .six .hat {
+    width: 50px;
+    top: -45px;
+    left: 43%;
+    transform: translateX(-50%) rotate(-18deg) !important;
+  }
+}
+
+/* TOPI - HP kecil banget */
+@media (max-width: 480px) {
+  .six .hat {
+    width: 40px;
+    top: -35px;
+    left: 44%;
+    transform: translateX(-50%) rotate(-15deg) !important;
+  }
+  
+  .six img.profile-picture {
+    width: min(200px, 65%);
+  }
+}
+
 /* Hilangkan stroke dari SVG topi */
 .six .hat svg,
 .six .hat svg *,
@@ -349,7 +384,7 @@ button[type="submit"]:hover {
 /* ===== PERBAIKAN TEKS WISH - TIDAK TERPOTONG ===== */
 .wish {
   width: 100%;
-  max-width: 550px;
+  max-width: min(550px, 90%);
   margin: 15px auto 0;
   padding: 10px;
   text-align: center;
@@ -357,7 +392,7 @@ button[type="submit"]:hover {
 }
 
 .wish-hbd {
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 5vw, 2rem);
   margin: 0 0 10px 0;
   text-transform: uppercase;
   color: var(--gold);
@@ -365,7 +400,7 @@ button[type="submit"]:hover {
 }
 
 .wish h5 {
-  font-size: 1rem !important;
+  font-size: clamp(0.7rem, 3vw, 1rem) !important;
   font-weight: 300;
   line-height: 1.4 !important;
   margin: 8px 0 0 !important;
@@ -383,34 +418,36 @@ button[type="submit"]:hover {
 .ballons img {
   display: inline-block;
   position: absolute;
+  width: clamp(30px, 5vw, 50px);
 }
 
 .ballons img:nth-child(even) {
-  left: -10%;
+  left: -5%;
 }
 
 .ballons img:nth-child(odd) {
-  right: -10%;
+  right: -5%;
 }
 
 .ballons img:nth-child(3n + 0) {
   left: 30%;
 }
 
-.seven .eight {
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  width: 100vw;
+/* ===== PERBAIKAN LINGKARAN MUTER (BULAT BUKAN LONJONG) ===== */
+.eight svg {
+  position: absolute;
+  width: 30px !important;
+  height: 30px !important;
+  visibility: hidden;
+  z-index: -1;
 }
 
-.eight svg {
-  left: 0;
-  position: absolute;
-  top: 0;
-  visibility: hidden;
-  width: 25px;
-  z-index: -1;
+/* Responsif lingkaran */
+@media (max-width: 768px) {
+  .eight svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
 }
 
 .eight svg:nth-child(1) { fill: #e8c97f; left: 5vw; top: 7vh; }
@@ -423,30 +460,75 @@ button[type="submit"]:hover {
 .eight svg:nth-child(8) { fill: #8c7ae6; left: 37vw; top: 86vh; }
 .eight svg:nth-child(9) { fill: #6fa8dc; left: 87vw; top: 94vh; }
 
-.nine p {
-  font-size: 2rem;
-  font-weight: 300;
-  color: var(--text-muted);
+/* ===== EFEK BACKGROUND BARU (GLOW ORBS + GOLD DUST) ===== */
+/* Background Glow Orbs */
+.container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(232,201,127,0.08), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(232,201,127,0.05), transparent 55%),
+    radial-gradient(circle at 90% 20%, rgba(255,159,178,0.07), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(232,201,127,0.04), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatOrbs 25s ease-in-out infinite;
 }
 
-.nine .last-smile {
-  color: var(--gold-soft);
+@keyframes floatOrbs {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  33% { transform: translate(1%, -1%) scale(1.02); opacity: 1; }
+  66% { transform: translate(-0.5%, 1%) scale(0.98); opacity: 0.9; }
 }
 
-#replay {
-  cursor: pointer;
-  z-index: 3;
-  color: var(--gold);
-  text-decoration: underline;
+/* Efek partikel emas berjatuhan (hujan emas) - pakai CSS murni */
+@keyframes goldRain {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(20px) rotate(360deg);
+    opacity: 0;
+  }
 }
 
-#replay:hover {
-  color: var(--gold-soft);
+.gold-particle {
+  position: fixed;
+  top: 0;
+  pointer-events: none;
+  z-index: 0;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(135deg, #e8c97f, #c9a45c);
+  border-radius: 50%;
+  opacity: 0;
+  animation: goldRain linear infinite;
 }
 
-.swal-dark {
-  border: 1px solid var(--border);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+/* Particle positions (generated by JS, fallback CSS) */
+.gold-particle:nth-child(1) { left: 10%; animation-duration: 6s; animation-delay: 0s; width: 3px; height: 3px; }
+.gold-particle:nth-child(2) { left: 25%; animation-duration: 8s; animation-delay: 1s; width: 5px; height: 5px; }
+.gold-particle:nth-child(3) { left: 40%; animation-duration: 7s; animation-delay: 0.5s; width: 2px; height: 2px; }
+.gold-particle:nth-child(4) { left: 55%; animation-duration: 9s; animation-delay: 2s; width: 4px; height: 4px; }
+.gold-particle:nth-child(5) { left: 70%; animation-duration: 5.5s; animation-delay: 0.8s; width: 3px; height: 3px; }
+.gold-particle:nth-child(6) { left: 85%; animation-duration: 7.5s; animation-delay: 1.5s; width: 6px; height: 6px; }
+.gold-particle:nth-child(7) { left: 15%; animation-duration: 6.5s; animation-delay: 2.5s; width: 2px; height: 2px; }
+.gold-particle:nth-child(8) { left: 50%; animation-duration: 8.5s; animation-delay: 3s; width: 4px; height: 4px; }
+.gold-particle:nth-child(9) { left: 75%; animation-duration: 5s; animation-delay: 1.2s; width: 3px; height: 3px; }
+.gold-particle:nth-child(10) { left: 95%; animation-duration: 9.5s; animation-delay: 0.3s; width: 5px; height: 5px; }
+.gold-particle:nth-child(11) { left: 8%; animation-duration: 7s; animation-delay: 2.8s; width: 2px; height: 2px; }
+.gold-particle:nth-child(12) { left: 32%; animation-duration: 6.2s; animation-delay: 1.8s; width: 4px; height: 4px; }
+.gold-particle:nth-child(13) { left: 48%; animation-duration: 8.8s; animation-delay: 0.7s; width: 3px; height: 3px; }
+.gold-particle:nth-child(14) { left: 63%; animation-duration: 5.8s; animation-delay: 2.2s; width: 5px; height: 5px; }
+.gold-particle:nth-child(15) { left: 78%; animation-duration: 7.2s; animation-delay: 1.1s; width: 2px; height: 2px; }
+.gold-particle:nth-child(16) { left: 92%; animation-duration: 6.5s; animation-delay: 3.2s; width: 3px; height: 3px; }
+
+/* Sembunyikan nine p karena gak dipakai */
+.nine p, .nine .last-smile, #replay {
+  display: none;
 }
 
 /* Animasi */
@@ -468,18 +550,7 @@ button[type="submit"]:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-.container::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(232,201,127,0.06), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 40%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ===== RESPONSIF HP ===== */
+/* ===== RESPONSIF HP LANJUTAN ===== */
 @media (max-width: 768px) {
   .container {
     width: 100%;
@@ -499,72 +570,42 @@ button[type="submit"]:hover {
     display: block;
   }
 
-  .idea-6 span {
-    font-size: 3rem !important;
-    letter-spacing: 4px;
-  }
-
-  .six .hat {
-    width: 50px;
-    top: -30px;
-  }
-
   .wish-hbd {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
 
   .wish h5 {
-    font-size: 0.85rem !important;
-  }
-
-  .nine p {
-    font-size: 1.5rem;
+    font-size: 0.8rem !important;
   }
   
-  .six img.profile-picture {
-    width: 220px;
-    height: 220px;
+  .container > div {
+    top: 15vh;
   }
 }
 
 @media (max-width: 480px) {
   .wish h5 {
-    font-size: 0.75rem !important;
-  }
-  
-  .idea-6 span {
-    font-size: 2rem !important;
-    letter-spacing: 2px;
-  }
-  
-  .six .hat {
-    width: 40px;
-    top: -25px;
-  }
-  
-  .six img.profile-picture {
-    width: 180px;
-    height: 180px;
+    font-size: 0.7rem !important;
   }
   
   .wish-hbd {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+  }
+  
+  .container > div {
+    top: 12vh;
   }
 }
 
-/* ===== EFEK FLOATING & GLOW UNTUK FOTO ===== */
+/* Efek floating & glow untuk foto (jika pakai class floating-glow) */
 .floating-glow {
   animation: floatGlowPhoto 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
   transition: all 0.3s ease;
 }
 
 @keyframes floatGlowPhoto {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 @keyframes glowPulse {
@@ -576,7 +617,7 @@ button[type="submit"]:hover {
   }
 }
 
-/* Efek partikel bunga di sekitar foto */
+/* Lingkaran muter di foto (opsional, kalau mau diaktifin) */
 .six {
   position: relative;
   overflow: visible;
@@ -589,37 +630,13 @@ button[type="submit"]:hover {
   left: -20px;
   right: -20px;
   bottom: -20px;
-  background: radial-gradient(circle, rgba(232,201,127,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(232,201,127,0.08) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
-  animation: rotateGlow 8s linear infinite;
+  animation: rotateGlow 12s linear infinite;
 }
 
 @keyframes rotateGlow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Bunga/partikel berjatuhan (confetti style) */
-@keyframes fall {
-  0% {
-    transform: translateY(-100px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.petal {
-  position: fixed;
-  pointer-events: none;
-  z-index: 999;
-  font-size: 20px;
-  animation: fall linear infinite;
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
