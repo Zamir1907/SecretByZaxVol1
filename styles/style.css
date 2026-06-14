@@ -430,9 +430,9 @@ button[type="submit"]:hover {
   left: 30%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .ballons img {
-    max-height: 540px;
+    max-height: 1024px;
   }
 }
 
