@@ -15,145 +15,111 @@
 
 <body>
 
-<div id="startOverlay" class="start-overlay" role="dialog" aria-modal="true" aria-labelledby="startTitle" aria-describedby="startDesc">
-  <div class="start-card">
-    <div class="start-mark">✦</div>
-    <h2 id="startTitle">A Moment to Begin</h2>
-    <p id="startDesc">A short experience is ready. Tap anywhere to continue.</p>
-
-    <div class="start-pill">
-      <span>Tap anywhere</span>
-    </div>
-
-    <span class="start-note">Music and animation will start after you enter.</span>
+<div id="startOverlay" class="overlay" tabindex="0" role="button" aria-label="Tap to begin">
+  <div class="content">
+    <div class="mark">✦</div>
+    <div class="title">tap to begin</div>
+    <div class="hint">music starts after enter</div>
   </div>
 </div>
 
 <style>
   :root{
-    --bg-1:#0a0c11;
-    --bg-2:#121624;
-    --card:#10131b;
-    --line:rgba(255,255,255,.08);
+    --bg1:#090b10;
+    --bg2:#151824;
     --text:#ece8df;
-    --muted:rgba(236,232,223,.68);
-    --accent:#cbb88b;
-    --accent-2:#8d93a8;
-    --shadow:0 20px 60px rgba(0,0,0,.45);
+    --muted:rgba(236,232,223,.62);
+    --accent:#cdbb8c;
   }
 
-  .start-overlay{
+  html,body{
+    width:100%;
+    height:100%;
+  }
+
+  body{
+    margin:0;
+    overflow:hidden;
+    background:
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,.07), transparent 28%),
+      linear-gradient(135deg, var(--bg1), var(--bg2));
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+
+  .overlay{
     position:fixed;
     inset:0;
-    z-index:99999;
     display:grid;
     place-items:center;
-    padding:24px;
-    background:
-      radial-gradient(circle at top, rgba(255,255,255,.08), transparent 34%),
-      linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
     cursor:pointer;
-    transition:opacity .45s ease, visibility .45s ease;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+    transition:opacity .35s ease, visibility .35s ease;
   }
 
-  .start-card{
-    width:min(100%, 420px);
+  .content{
     text-align:center;
-    padding:34px 28px 30px;
-    border:1px solid var(--line);
-    border-radius:28px;
-    background:rgba(16,19,27,.72);
-    backdrop-filter:blur(14px);
-    box-shadow:var(--shadow);
-  }
-
-  .start-mark{
-    width:54px;
-    height:54px;
-    margin:0 auto 18px;
-    display:grid;
-    place-items:center;
-    border-radius:999px;
-    color:var(--accent);
-    background:rgba(203,184,139,.08);
-    border:1px solid rgba(203,184,139,.18);
-    font-size:1.2rem;
-  }
-
-  .start-card h2{
-    margin:0;
     color:var(--text);
-    font-size:1.8rem;
-    line-height:1.15;
-    letter-spacing:-.03em;
-    font-weight:600;
+    letter-spacing:-.02em;
+    transform:translateY(0);
+    animation: float 3.2s ease-in-out infinite;
   }
 
-  .start-card p{
-    margin:12px 0 22px;
-    color:var(--muted);
-    font-size:.98rem;
-  }
-
-  .start-pill{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    padding:11px 18px;
-    border-radius:999px;
-    border:1px solid rgba(203,184,139,.22);
-    background:rgba(203,184,139,.07);
+  .mark{
     color:var(--accent);
-    font-size:.9rem;
-    letter-spacing:.02em;
+    font-size:1.2rem;
+    margin-bottom:10px;
+    opacity:.92;
+    text-shadow:0 0 18px rgba(205,187,140,.18);
   }
 
-  .start-note{
-    display:block;
-    margin-top:18px;
-    color:var(--accent-2);
-    font-size:.78rem;
+  .title{
+    font-size:clamp(1.5rem, 4vw, 2.3rem);
+    font-weight:600;
+    text-transform:lowercase;
   }
 
-  .start-overlay.is-hidden{
+  .hint{
+    margin-top:8px;
+    font-size:.82rem;
+    color:var(--muted);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  .overlay:focus-visible{
+    outline:2px solid rgba(205,187,140,.7);
+    outline-offset:-2px;
+  }
+
+  .overlay.hide{
     opacity:0;
     visibility:hidden;
     pointer-events:none;
   }
 
-  @media (max-width: 480px){
-    .start-card{
-      padding:28px 20px 24px;
-      border-radius:24px;
-    }
-    .start-card h2{
-      font-size:1.45rem;
-    }
-    .start-card p{
-      font-size:.92rem;
-    }
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
   }
 
   @media (prefers-reduced-motion: reduce){
-    .start-overlay{
-      transition:none;
-    }
+    .content{animation:none}
+    .overlay{transition:none}
   }
 </style>
 
 <script>
   const startOverlay = document.getElementById('startOverlay');
 
-  function startExperience() {
-    startOverlay.classList.add('is-hidden');
+  function enterScene(){
+    startOverlay.classList.add('hide');
   }
 
-  startOverlay.addEventListener('click', startExperience);
+  startOverlay.addEventListener('click', enterScene);
   startOverlay.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') startExperience();
+    if (e.key === 'Enter' || e.key === ' ') enterScene();
   });
-
-  startOverlay.tabIndex = 0;
 </script>
 
 <!-- AUDIO -->
