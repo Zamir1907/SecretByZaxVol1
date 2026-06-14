@@ -15,12 +15,20 @@ if (window.gsap) {
   gsap.to(card, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out", delay: 0.1 });
 }
 
-// ===== TOGGLE SHOW/HIDE PASSWORD =====
-if (togglePw) {
-  togglePw.addEventListener("click", () => {
+// ===== TOGGLE SHOW/HIDE PASSWORD (tanpa efek stroke) =====
+if (togglePw && pwInput) {
+  togglePw.addEventListener("click", (e) => {
+    e.preventDefault();
     const isHidden = pwInput.type === "password";
     pwInput.type   = isHidden ? "text" : "password";
     togglePw.textContent = isHidden ? "🙈" : "👁";
+    pwInput.focus();
+  });
+  
+  // Touch device: mencegah outline jelek
+  togglePw.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    togglePw.click();
   });
 }
 
@@ -116,16 +124,32 @@ if (hintTrigger) {
     e.stopPropagation();
     togglePopover();
   });
+  
+  hintTrigger.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    togglePopover();
+  });
 }
 
 // tutup kalau klik di luar
 document.addEventListener("click", (e) => {
-  if (popoverOpen && !hintPopover.contains(e.target) && e.target !== hintTrigger) {
-    closePopover();
+  if (popoverOpen && hintPopover && hintTrigger) {
+    if (!hintPopover.contains(e.target) && e.target !== hintTrigger) {
+      closePopover();
+    }
   }
 });
 
-// ===== KLIK BARIS HINT: auto-isi + copy =====
+document.addEventListener("touchstart", (e) => {
+  if (popoverOpen && hintPopover && hintTrigger) {
+    if (!hintPopover.contains(e.target) && e.target !== hintTrigger) {
+      closePopover();
+    }
+  }
+});
+
+// ===== TOAST NOTIFICATION =====
 function showToast(msg) {
   clearTimeout(toastTimer);
   copyToast.textContent = msg;
@@ -133,28 +157,49 @@ function showToast(msg) {
   toastTimer = setTimeout(() => copyToast.classList.remove("show"), 1600);
 }
 
+// ===== KLIK BARIS HINT: auto-isi + copy =====
 document.querySelectorAll(".hint-row").forEach(row => {
-  row.addEventListener("click", () => {
+  row.addEventListener("click", (e) => {
+    e.stopPropagation();
     const field = row.dataset.field;
     const value = row.dataset.value;
 
-    // auto-isi input
     const input = document.getElementById(field);
     if (input) {
       input.value = value;
-      if (field === "password") pwInput.type = "password"; // reset show/hide
-      input.style.borderColor = "rgba(232,201,127,0.6)";
-      setTimeout(() => input.style.borderColor = "", 500);
+      if (field === "password" && pwInput) pwInput.type = "password";
+      input.style.borderColor = "rgba(232,201,127,0.8)";
+      input.style.boxShadow = "0 0 0 2px rgba(232,201,127,0.2)";
+      setTimeout(() => {
+        input.style.borderColor = "";
+        input.style.boxShadow = "";
+      }, 400);
     }
 
-    // copy ke clipboard
     navigator.clipboard.writeText(value)
       .then(() => showToast(`✓ ${field} tersalin`))
       .catch(() => showToast(`✓ ${field} diisi`));
 
-    // animasi row
     if (window.gsap) {
-      gsap.fromTo(row, { x: -3 }, { x: 0, duration: 0.25, ease: "power2.out" });
+      gsap.fromTo(row, { scale: 0.98 }, { scale: 1, duration: 0.2, ease: "power2.out" });
     }
+    
+    setTimeout(() => {
+      if (popoverOpen) closePopover();
+    }, 300);
+  });
+  
+  row.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    row.click();
   });
 });
+
+// bersihin error saat input difokus
+const usernameInput = document.getElementById("username");
+if (usernameInput) {
+  usernameInput.addEventListener("focus", clearError);
+}
+if (pwInput) {
+  pwInput.addEventListener("focus", clearError);
+}
