@@ -1,5 +1,17 @@
 // Birthday page scripts - Version improved
+// Setup musik (cara yang works di Instagram)
+const audioSrc = document.getElementById('bgMusicSrc')?.textContent.trim();
+const bgMusic = audioSrc ? new Audio(audioSrc) : null;
+if (bgMusic) {
+  bgMusic.loop = true;
+}
 
+// Fungsi untuk play musik (harus dipanggil setelah user interaksi)
+function playMusic() {
+  if (bgMusic && bgMusic.paused) {
+    bgMusic.play().catch(e => console.log('Auto-play blocked:', e));
+  }
+}
 // Animation GSAP timeline on load event
 window.addEventListener("load", () => {
   const audio = document.querySelector(".song");
