@@ -14,20 +14,23 @@ function validateForm() {
   const validPassword = "zaxganteng";
 
   if (username === validUsername && password === validPassword) {
-    Swal.fire({
-      icon: "success",
-      title: "Berhasil masuk",
-      text: "Selamat datang!",
-      showConfirmButton: false,
-      timer: 1500,
-      background: "#181b24",
-      color: "#f4f1ea",
-      iconColor: "#e8c97f",
-      customClass: { popup: "swal-dark" },
-    }).then(() => {
-      window.location.href = "birthday.html";
-    });
-  } else {
+  // Simpan status login ke localStorage
+  localStorage.setItem('loginSuccess', 'true');
+  
+  Swal.fire({
+    icon: "success",
+    title: "Berhasil masuk",
+    text: "Selamat datang!",
+    showConfirmButton: false,
+    timer: 1500,
+    background: "#181b24",
+    color: "#f4f1ea",
+    iconColor: "#e8c97f",
+    customClass: { popup: "swal-dark" },
+  }).then(function () {
+    window.location.href = "birthday.html";
+  });
+} else {
     Swal.fire({
       icon: "error",
       title: "Gagal masuk",
