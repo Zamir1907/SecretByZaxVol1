@@ -1,36 +1,30 @@
-// Birthday page scripts - Fixed Music
+// Birthday page scripts
 
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
 
 function playMusic() {
-  if (!bgMusic) return;
-  if (!musicPlayed) {
-    bgMusic.play().then(() => {
-      musicPlayed = true;
-    }).catch(e => {
-      console.log('Audio blocked, will retry on next interaction:', e.message);
-    });
-  }
+  if (!bgMusic || musicPlayed) return;
+  bgMusic.play().then(() => {
+    musicPlayed = true;
+    console.log('Musik berjalan');
+  }).catch(e => console.log('Error play:', e));
 }
 
-// ===== UNLOCK MUSIK: pasang di banyak event supaya Instagram browser juga kena =====
-const events = ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'pointerdown'];
+// Cek apakah login sukses (dari localStorage)
+const isLoginSuccess = localStorage.getItem('loginSuccess') === 'true';
 
-function unlockMusicHandler() {
-  playMusic();
-  if (musicPlayed) {
-    // Hapus semua listener setelah musik berhasil diputar
-    events.forEach(evt => {
-      document.removeEventListener(evt, unlockMusicHandler);
-    });
-  }
+// Jika login sukses, mainkan musik
+if (isLoginSuccess) {
+  // Hapus status setelah dibaca
+  localStorage.removeItem('loginSuccess');
+  
+  // Tunggu sebentar lalu play (biar DOM siap)
+  setTimeout(() => {
+    playMusic();
+  }, 500);
 }
-
-events.forEach(evt => {
-  document.addEventListener(evt, unlockMusicHandler);
-});
 
 // ===== SETUP TOMBOL WISH =====
 const setupWishButton = () => {
@@ -50,7 +44,7 @@ const setupWishButton = () => {
   }
 };
 
-// ===== ANIMATION TIMELINE =====
+// ===== ANIMATION TIMELINE (sama seperti sebelumnya) =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
@@ -109,19 +103,12 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
-  // ===== RESTART ANIMATION & MUSIC =====
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
-      // Reset musik
       if (bgMusic) {
-        bgMusic.pause();
         bgMusic.currentTime = 0;
-        musicPlayed = false; // reset flag
-        // Coba play lagi (butuh interaksi user)
-        bgMusic.play().then(() => {
-          musicPlayed = true;
-        }).catch(() => {});
+        bgMusic.play().catch(() => {});
       }
       tl.restart();
     });
