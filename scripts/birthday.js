@@ -1,26 +1,62 @@
-// Birthday page scripts - Version improved
+// Birthday page scripts - FINAL WORK ON INSTAGRAM
 
-// Animation GSAP timeline on load event
-window.addEventListener("load", () => {
-  const audio = document.querySelector(".song");
-  if (audio) {
-    audio.play().catch(() => {
-      // Browser block autoplay without interaction — animation tetap jalan
-      console.log("Autoplay di-block. Animasi tetap berjalan.");
-    });
-  }
-  animationTimeline();
+// ===== SETUP MUSIK =====
+const bgMusic = document.getElementById('bgMusic');
+let musicPlayed = false;
+let animationStarted = false;
+let tl = null;
+
+// Deteksi Instagram
+const isInstagram = () => {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return ua.indexOf('Instagram') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+};
+
+// Fungsi play musik
+function playMusic() {
+  if (!bgMusic || musicPlayed) return;
   
-  // Setup tombol wish
-  setupWishButton();
-});
+  bgMusic.load();
+  bgMusic.volume = 1.0;
+  
+  bgMusic.play().then(() => {
+    musicPlayed = true;
+    console.log('Musik berjalan');
+  }).catch(e => {
+    console.log('Error play musik:', e.message);
+    if (isInstagram() && !musicPlayed) {
+      setTimeout(() => {
+        bgMusic.play().catch(() => {});
+      }, 500);
+    }
+  });
+}
 
+// ===== MEMULAI SEMUANYA (dipanggil saat user klik overlay) =====
+function startEverything() {
+  if (animationStarted) return;
+  animationStarted = true;
+  
+  playMusic();
+  
+  const overlay = document.getElementById('startOverlay');
+  if (overlay) {
+    overlay.classList.add('hide');
+  }
+  
+  if (tl && tl.paused) {
+    tl.resume();
+  }
+}
+
+// ===== SETUP TOMBOL WISH =====
 const setupWishButton = () => {
   const wishBtn = document.getElementById("wishButton");
   if (wishBtn) {
     wishBtn.addEventListener("click", () => {
+      if (!musicPlayed) playMusic();
       Swal.fire({
-        title: "Untuk Kamu ✨",
+        title: "✨ Untuk Kamu ✨",
         text: "Semoga semua impianmu tercapai tahun ini. Bahagia selalu!",
         icon: "success",
         confirmButtonText: "Terima kasih 💫",
@@ -31,8 +67,8 @@ const setupWishButton = () => {
   }
 };
 
+// ===== ANIMATION TIMELINE (DURASI LAMBAT - TANPA HILANGKAN FOTO) =====
 const animationTimeline = () => {
-  // Split chars that need to be animated individually
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
 
@@ -48,282 +84,75 @@ const animationTimeline = () => {
       .join("</span><span>")}</span>`;
   }
 
-  const ideaTextTrans = {
-    opacity: 0,
-    y: -20,
-    rotationX: 5,
-    skewX: "15deg",
-  };
+  const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
+  const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
 
-  const ideaTextTransLeave = {
-    opacity: 0,
-    y: 20,
-    rotationY: 5,
-    skewY: "-15deg",
-  };
+  tl = new TimelineMax({ paused: true });
 
-  // Animation timeline
-  const tl = new TimelineMax();
-
-  tl.to(".container", 0.6, {
-    visibility: "visible",
-  })
-    .from(".one", 0.7, {
-      opacity: 0,
-      y: 10,
-    })
-    .from(".two", 0.4, {
-      opacity: 0,
-      y: 10,
-    })
-    .to(
-      ".one",
-      0.7,
-      {
-        opacity: 0,
-        y: 10,
-      },
-      "+=3.5"
-    )
-    .to(
-      ".two",
-      0.7,
-      {
-        opacity: 0,
-        y: 10,
-      },
-      "-=1"
-    )
-    .from(".three", 0.7, {
-      opacity: 0,
-      y: 10,
-    })
-    .to(
-      ".three",
-      0.7,
-      {
-        opacity: 0,
-        y: 10,
-      },
-      "+=3"
-    )
-    .from(".four", 0.7, {
-      scale: 0.2,
-      opacity: 0,
-    })
-    .from(".fake-btn", 0.3, {
-      scale: 0.2,
-      opacity: 0,
-    })
-    .staggerTo(
-      ".hbd-chatbox span",
-      1.5,
-      {
-        visibility: "visible",
-      },
-      0.05
-    )
-    .to(
-      ".fake-btn",
-      0.1,
-      {
-        backgroundColor: "#e8c97f",
-        color: "#1a1a1a",
-      },
-      "+=2.2"
-    )
-    .to(
-      ".four",
-      0.5,
-      {
-        scale: 0.2,
-        opacity: 0,
-        y: -150,
-      },
-      "+=0.8"
-    )
+  tl.to(".container", 0.6, { visibility: "visible" })
+    .from(".one", 0.7, { opacity: 0, y: 10 })
+    .from(".two", 0.4, { opacity: 0, y: 10 })
+    .to(".one", 0.7, { opacity: 0, y: 10 }, "+=3.4")
+    .to(".two", 0.7, { opacity: 0, y: 10 }, "-=1")
+    .from(".three", 0.7, { opacity: 0, y: 10 })
+    .to(".three", 0.7, { opacity: 0, y: 10 }, "+=3.3")
+    .from(".four", 0.7, { scale: 0.2, opacity: 0 })
+    .from(".fake-btn", 0.3, { scale: 0.2, opacity: 0 })
+    .staggerTo(".hbd-chatbox span", 1.5, { visibility: "visible" }, 0.05)
+    .to(".fake-btn", 0.1, { backgroundColor: "#e8c97f", color: "#1a1a1a" }, "+=1.5")
+    .to(".four", 0.5, { scale: 0.2, opacity: 0, y: -150 }, "+=1")
     .from(".idea-1", 0.7, ideaTextTrans)
-    .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.5")
+    .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-2", 0.7, ideaTextTrans)
-    .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.5")
+    .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-3", 0.7, ideaTextTrans)
-    .to(".idea-3 strong", 0.5, {
-      scale: 1.1,
-      x: 10,
-      backgroundColor: "#e8c97f",
-      color: "#1a1a1a",
-    })
-    .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.5")
+    .to(".idea-3 strong", 0.5, { scale: 1.1, x: 10, backgroundColor: "#e8c97f", color: "#1a1a1a" })
+    .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-4", 0.7, ideaTextTrans)
-    .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.5")
-    .from(
-      ".idea-5",
-      0.7,
-      {
-        rotationX: 15,
-        rotationZ: -10,
-        skewY: "-5deg",
-        y: 50,
-        z: 10,
-        opacity: 0,
-      },
-      "+=1.5"
-    )
-    .to(
-      ".idea-5 span",
-      0.7,
-      {
-        rotation: 90,
-        x: 8,
-      },
-      "+=1.4"
-    )
-    .to(
-      ".idea-5",
-      0.7,
-      {
-        scale: 0.2,
-        opacity: 0,
-      },
-      "+=2"
-    )
-    .staggerFrom(
-      ".idea-6 span",
-      0.8,
-      {
-        scale: 3,
-        opacity: 0,
-        rotation: 15,
-        ease: Expo.easeOut,
-      },
-      0.2
-    )
-    .staggerTo(
-      ".idea-6 span",
-      0.8,
-      {
-        scale: 3,
-        opacity: 0,
-        rotation: -15,
-        ease: Expo.easeOut,
-      },
-      0.2,
-      "+=1.5"
-    )
-    .staggerFromTo(
-      ".ballons img",
-      2.5,
-      {
-        opacity: 0.9,
-        y: 1400,
-      },
-      {
-        opacity: 1,
-        y: -1000,
-      },
-      0.2
-    )
-    .from(
-      ".profile-picture",
-      0.5,
-      {
-        scale: 3.5,
-        opacity: 0,
-        x: 25,
-        y: -25,
-        rotationZ: -45,
-      },
-      "-=2"
-    )
-    .from(".hat", 0.5, {
-      x: -100,
-      y: 350,
-      rotation: -180,
-      opacity: 0,
-    })
-    .staggerFrom(
-      ".wish-hbd span",
-      0.7,
-      {
-        opacity: 0,
-        y: -50,
-        rotation: 150,
-        skewX: "30deg",
-        ease: Elastic.easeOut.config(1, 0.5),
-      },
-      0.1
-    )
-    .staggerFromTo(
-      ".wish-hbd span",
-      0.7,
-      {
-        scale: 1.4,
-        rotationY: 150,
-      },
-      {
-        scale: 1,
-        rotationY: 0,
-        color: "#ff69b4",
-        ease: Expo.easeOut,
-      },
-      0.1,
-      "party"
-    )
-    .from(
-      ".wish h5",
-      0.5,
-      {
-        opacity: 0,
-        y: 10,
-        skewX: "-15deg",
-      },
-      "party"
-    )
-    .staggerTo(
-      ".eight svg",
-      1.5,
-      {
-        visibility: "visible",
-        opacity: 0,
-        scale: 80,
-        repeat: 3,
-        repeatDelay: 1.4,
-      },
-      0.3
-    )
-    .to(".six", 0.5, {
-      opacity: 0,
-      y: 30,
-      zIndex: "-1",
-    })
-    .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
-    .to(
-      ".last-smile",
-      0.5,
-      {
-        rotation: 90,
-      },
-      "+=1.8"
-    );
-
-  // Restart animation on click
-  const replyBtn = document.getElementById("replay");
-  if (replyBtn) {
-    replyBtn.addEventListener("click", () => {
-      const audio = document.querySelector(".song");
-      if (audio) {
-        audio.currentTime = 0;
-        audio.play().catch(() => {
-          console.log("Audio play di-block. Perlu interaksi user.");
-        });
-      }
-      tl.restart();
-    });
-  }
+    .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
+    .from(".idea-5", 0.7, { rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=2")
+    .to(".idea-5 span", 0.7, { rotation: 90, x: 8 }, "+=2")
+    .to(".idea-5", 0.7, { scale: 0.2, opacity: 0 }, "+=2.5")
+    .staggerFrom(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: 15, ease: Expo.easeOut }, 0.2)
+    .staggerTo(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: -15, ease: Expo.easeOut }, 0.2, "+=2.5")
+    .staggerFromTo(".ballons img", 2.5, { opacity: 0.9, y: 1400 }, { opacity: 1, y: -1000 }, 0.2)
+    .from(".profile-picture", 0.5, { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
+    .from(".hat", 0.5, { x: -100, y: 350, rotation: -180, opacity: 0 })
+    .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
+    .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
+    .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
+    .staggerTo(".eight svg", 1.5, { visibility: "visible", opacity: 0, scale: 80, repeat: 3, repeatDelay: 1.4 }, 0.3);
+    // ===== BARIS DI BAWAH INI DIHAPUS =====
+    // .to(".six", 0.5, { opacity: 0, y: 30, zIndex: "-1" })  // <-- DIHAPUS biar foto tetap ada
+    // .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)        // <-- DIHAPUS karena .nine tidak ada
+    // .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8")    // <-- DIHAPUS
 };
 
-// Disable right click (opsional)
-document.addEventListener('contextmenu', event => event.preventDefault());
 
-// Disable double click selection
-document.addEventListener('dblclick', event => event.preventDefault());
+// ===== LOAD EVENT =====
+window.addEventListener("load", () => {
+  console.log('Halaman loaded - animasi paused, platform:', isInstagram() ? 'Instagram' : 'Browser');
+  
+  animationTimeline();
+  setupWishButton();
+  
+  const overlay = document.getElementById('startOverlay');
+  if (overlay) {
+    console.log('Overlay ditemukan, memasang listener');
+    overlay.addEventListener('click', startEverything);
+    overlay.addEventListener('touchstart', startEverything);
+  } else {
+    console.log('Overlay TIDAK ditemukan! Cek ID di HTML');
+  }
+  
+  if (localStorage.getItem('loginSuccess') === 'true') {
+    localStorage.removeItem('loginSuccess');
+  }
+  
+  if (isInstagram()) {
+    console.log('Mode Instagram aktif - user harus klik overlay untuk mulai');
+  }
+});
+
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dblclick', e => e.preventDefault());
