@@ -68,71 +68,156 @@ const setupWishButton = () => {
 };
 
 // ===== ANIMATION TIMELINE (DURASI LAMBAT - TANPA HILANGKAN FOTO) =====
+// ===== ANIMATION TIMELINE (DURASI LAMBAT - TANPA HILANGKAN FOTO) =====
+// ===== UPDATED: Smoother, more natural, professional animations =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
-
   if (textBoxChars) {
     textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
       .split("")
       .join("</span><span>")}</span>`;
   }
-
   if (hbd) {
     hbd.innerHTML = `<span>${hbd.innerHTML
       .split("")
       .join("</span><span>")}</span>`;
   }
 
-  const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
-  const ideaTextTransLeave = { opacity: 0, y: 20, rotationY: 5, skewY: "-15deg" };
+  // ===== MASUK: horizontal slide dari kiri + slight rotation (lebih cinematic) =====
+  const ideaTextTrans = {
+    opacity: 0,
+    x: -40,
+    rotation: -3,
+    ease: Power3.easeOut
+  };
+
+  // ===== KELUAR: dissolve ke kanan + slight rotation (smooth storytelling) =====
+  const ideaTextTransLeave = {
+    opacity: 0,
+    x: 40,
+    rotation: 2,
+    ease: Power2.easeIn
+  };
 
   tl = new TimelineMax({ paused: true });
 
   tl.to(".container", 0.6, { visibility: "visible" })
-    .from(".one", 0.7, { opacity: 0, y: 10 })
-    .from(".two", 0.4, { opacity: 0, y: 10 })
-    .to(".one", 0.7, { opacity: 0, y: 10 }, "+=3.4")
-    .to(".two", 0.7, { opacity: 0, y: 10 }, "-=1")
-    .from(".three", 0.7, { opacity: 0, y: 10 })
-    .to(".three", 0.7, { opacity: 0, y: 10 }, "+=3.3")
-    .from(".four", 0.7, { scale: 0.2, opacity: 0 })
-    .from(".fake-btn", 0.3, { scale: 0.2, opacity: 0 })
+
+    // ===== .one & .two: Soft Fade Slide Up — lebih cinematic, y:30 lebih kerasa naik =====
+    .from(".one", 1.0, { opacity: 0, y: 30, ease: Power3.easeOut })
+    .from(".two", 0.8, { opacity: 0, y: 20, ease: Power2.easeOut }, "-=0.3")
+
+    // ===== KELUAR .one & .two: smooth easeIn =====
+    .to(".one", 0.8, { opacity: 0, y: -20, ease: Power2.easeIn }, "+=3.2")
+    .to(".two", 0.7, { opacity: 0, y: -15, ease: Power2.easeIn }, "-=0.5")
+
+    // ===== .three: Blur Fade In — efek fokus kamera, elegan =====
+    .from(".three", 1.0, {
+      opacity: 0,
+      filter: "blur(8px)",
+      y: 15,
+      ease: Power2.easeOut
+    })
+    .to(".three", 0.8, {
+      opacity: 0,
+      filter: "blur(8px)",
+      y: -15,
+      ease: Power2.easeIn
+    }, "+=3.0")
+
+    // ===== .four: scale masuk lebih smooth =====
+    .from(".four", 0.8, { scale: 0.5, opacity: 0, ease: Back.easeOut.config(1.5) })
+    .from(".fake-btn", 0.4, { scale: 0.5, opacity: 0, ease: Back.easeOut.config(1.5) })
     .staggerTo(".hbd-chatbox span", 1.5, { visibility: "visible" }, 0.05)
     .to(".fake-btn", 0.1, { backgroundColor: "#e8c97f", color: "#1a1a1a" }, "+=1.5")
-    .to(".four", 0.5, { scale: 0.2, opacity: 0, y: -150 }, "+=1")
+    .to(".four", 0.6, { scale: 0.3, opacity: 0, y: -100, ease: Power3.easeIn }, "+=1")
+
+    // ===== .idea-1 s/d .idea-4: horizontal slide — storytelling, mudah dibaca =====
     .from(".idea-1", 0.7, ideaTextTrans)
     .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.8")
+
     .from(".idea-2", 0.7, ideaTextTrans)
     .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.8")
+
     .from(".idea-3", 0.7, ideaTextTrans)
-    .to(".idea-3 strong", 0.5, { scale: 1.1, x: 10, backgroundColor: "#e8c97f", color: "#1a1a1a" })
+
+    // ===== .idea-3 strong: Highlight Pulse — lebih natural, tanpa scale agresif =====
+    .to(".idea-3 strong", 0.6, {
+      backgroundColor: "#e8c97f",
+      color: "#1a1a1a",
+      paddingLeft: "6px",
+      paddingRight: "6px",
+      borderRadius: "4px",
+      ease: Power2.easeOut
+    })
     .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.8")
+
     .from(".idea-4", 0.7, ideaTextTrans)
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
-    .from(".idea-5", 0.7, { rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=2")
-    .to(".idea-5 span", 0.7, { rotation: 90, x: 8 }, "+=2")
-    .to(".idea-5", 0.7, { scale: 0.2, opacity: 0 }, "+=2.5")
-    .staggerFrom(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: 15, ease: Expo.easeOut }, 0.2)
-    .staggerTo(".idea-6 span", 0.8, { scale: 3, opacity: 0, rotation: -15, ease: Expo.easeOut }, 0.2, "+=2.5")
+
+    // ===== .idea-5: Stagger Word Drop — per span, Back.easeOut natural =====
+    .staggerFrom(".idea-5 span", 0.5, {
+      opacity: 0,
+      y: -30,
+      ease: Back.easeOut.config(1.4)
+    }, 0.12, "+=2")
+    .to(".idea-5 span", 0.4, { rotation: 0 }, "+=2")  // reset rotation if any
+    .staggerTo(".idea-5 span", 0.4, {
+      opacity: 0,
+      y: 30,
+      ease: Power2.easeIn
+    }, 0.08, "+=2.0")
+
+    // ===== .idea-6 span: Scale dikurangi dari 3 → 1.5, lebih profesional =====
+    .staggerFrom(".idea-6 span", 0.7, {
+      scale: 1.5,
+      opacity: 0,
+      y: -20,
+      rotation: 8,
+      ease: Expo.easeOut
+    }, 0.15)
+    .staggerTo(".idea-6 span", 0.6, {
+      scale: 0.8,
+      opacity: 0,
+      y: 20,
+      rotation: -5,
+      ease: Power3.easeIn
+    }, 0.1, "+=2.5")
+
+    // ===== Ballons: tetap sama, sudah smooth =====
     .staggerFromTo(".ballons img", 2.5, { opacity: 0.9, y: 1400 }, { opacity: 1, y: -1000 }, 0.2)
-    .from(".profile-picture", 0.5, { scale: 3.5, opacity: 0, x: 25, y: -25, rotationZ: -45 }, "-=2")
-.from(".hat", 0.8, { 
-  x: -300,
-  y: -150,
-  rotation: -720,
-  scale: 0.3,
-  opacity: 0,
-  ease: Back.easeOut.config(1.2)
-}, "+=0.5")
-.to(".hat", 0.3, {
-  rotation: -22,
-  ease: Power2.easeOut
-}, "-=0.2")
-    .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
-    .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
-    .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
-    // ===== EFFECT UNTUK .eight svg =====
+
+    // ===== Profile picture & hat: sedikit lebih smooth =====
+    .from(".profile-picture", 0.6, {
+      scale: 2.5,
+      opacity: 0,
+      x: 20,
+      y: -20,
+      rotationZ: -30,
+      ease: Back.easeOut.config(1.2)
+    }, "-=2")
+    .from(".hat", 0.5, { x: -80, y: 300, rotation: -150, opacity: 0, ease: Power3.easeOut })
+
+    // ===== .wish-hbd span: Wave Bounce — dikurangi dari rotation:150 → 30, lebih elegan =====
+    .staggerFrom(".wish-hbd span", 0.8, {
+      opacity: 0,
+      y: -40,
+      rotation: 30,
+      skewX: "10deg",
+      ease: Back.easeOut.config(2)
+    }, 0.08)
+
+    // ===== .wish-hbd span color: subtle rotationY, lebih smooth =====
+    .staggerFromTo(".wish-hbd span", 0.7,
+      { scale: 1.3, rotationY: 90 },
+      { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut },
+      0.08, "party")
+
+    // ===== .wish h5: clean fade in =====
+    .from(".wish h5", 0.6, { opacity: 0, y: 12, ease: Power2.easeOut }, "party")
+
+    // ===== .eight svg: tetap sama =====
     .set(".eight svg", { visibility: "visible" })
     .staggerFromTo(".eight svg", 1.5,
       { opacity: 1, scale: 1, immediateRender: false },
