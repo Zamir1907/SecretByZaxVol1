@@ -6,6 +6,22 @@
   -webkit-touch-callout: none;
 }
 
+/* Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Atau pakai ProductSans seperti dulu */
+@font-face {
+  font-family: 'ProductSans';
+  src: url('https://raw.githubusercontent.com/XYZax404/zaxfile/main/ProductSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Apply ke body */
+body {
+  font-family: 'ProductSans', 'Inter', 'Poppins', sans-serif;
+}
+
 /* Biarkan form login tetap bisa diketik */
 input[type="text"],
 input[type="password"] {
