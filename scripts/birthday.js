@@ -24,8 +24,6 @@ function playMusic() {
     console.log('Musik berjalan');
   }).catch(e => {
     console.log('Error play musik:', e.message);
-    
-    // Khusus Instagram: coba lagi setelah delay
     if (isInstagram() && !musicPlayed) {
       setTimeout(() => {
         bgMusic.play().catch(() => {});
@@ -41,7 +39,6 @@ function startEverything() {
   
   playMusic();
   
-  // Hilangkan overlay dengan animasi
   const overlay = document.getElementById('startOverlay');
   if (overlay) {
     overlay.style.opacity = '0';
@@ -51,7 +48,6 @@ function startEverything() {
     }, 500);
   }
   
-  // Resume animasi
   if (tl && tl.paused) {
     tl.resume();
   }
@@ -134,7 +130,6 @@ const animationTimeline = () => {
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(".last-smile", 0.5, { rotation: 90 }, "+=1.8");
 
-  // TOMBOL REPLAY
   const replyBtn = document.getElementById("replay");
   if (replyBtn) {
     replyBtn.addEventListener("click", () => {
@@ -147,7 +142,6 @@ const animationTimeline = () => {
       tl.pause();
       animationStarted = false;
       
-      // Munculkan overlay lagi
       const overlay = document.getElementById('startOverlay');
       if (overlay) {
         overlay.style.display = 'flex';
@@ -157,31 +151,31 @@ const animationTimeline = () => {
   }
 };
 
-// ===== LOAD =====
+// ===== LOAD EVENT =====
 window.addEventListener("load", () => {
   console.log('Halaman loaded - animasi paused, platform:', isInstagram() ? 'Instagram' : 'Browser');
   
   animationTimeline();
   setupWishButton();
   
-// Pasang listener untuk tombol (bukan overlay)
-const startButton = document.getElementById('startButton');
-if (startButton) {
-  startButton.addEventListener('click', startEverything);
-  startButton.addEventListener('touchstart', startEverything);
-}
+  // ✅ INI YANG BENAR - pasang listener ke startOverlay
+  const overlay = document.getElementById('startOverlay');
+  if (overlay) {
+    console.log('Overlay ditemukan, memasang listener');
+    overlay.addEventListener('click', startEverything);
+    overlay.addEventListener('touchstart', startEverything);
+  } else {
+    console.log('Overlay TIDAK ditemukan! Cek ID di HTML');
+  }
   
-  // Hapus localStorage setelah login sukses
   if (localStorage.getItem('loginSuccess') === 'true') {
     localStorage.removeItem('loginSuccess');
   }
   
-  // Khusus Instagram: tampilkan pesan tambahan di console
   if (isInstagram()) {
     console.log('Mode Instagram aktif - user harus klik overlay untuk mulai');
   }
 });
 
-// Prevent context menu & double click
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
