@@ -13,7 +13,7 @@ function validateForm() {
   const validPassword = "zaxganteng";
 
   if (username === validUsername && password === validPassword) {
-    // INI KUNCI NYA — set flag ke localStorage
+    // Set flag ke localStorage
     localStorage.setItem('loginSuccess', 'true');
     
     Swal.fire({
