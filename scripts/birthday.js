@@ -1,5 +1,27 @@
 // Birthday page scripts - INSTAGRAM OPTIMIZED VERSION
 
+const startBtn = document.getElementById('startMusicBtn');
+if (startBtn) {
+  startBtn.addEventListener('click', () => {
+    if (bgMusic) {
+      bgMusic.load();
+      bgMusic.play().then(() => {
+        musicPlayed = true;
+        startBtn.style.display = 'none';
+        console.log('Music started by button');
+      }).catch(e => console.log('Button play error:', e));
+    }
+  });
+  
+  // Hide after music starts
+  const checkMusicInterval = setInterval(() => {
+    if (musicPlayed && startBtn) {
+      startBtn.style.display = 'none';
+      clearInterval(checkMusicInterval);
+    }
+  }, 500);
+}
+
 // ===== SETUP MUSIK =====
 const bgMusic = document.getElementById('bgMusic');
 let musicPlayed = false;
