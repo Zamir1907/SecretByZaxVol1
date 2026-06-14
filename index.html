@@ -214,6 +214,142 @@
       color: rgba(232,201,127,0.5);
     }
 
+    /* ===== HINT POPOVER ===== */
+    .hint-wrap {
+      margin-top: 1.1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hint-container {
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+    }
+
+    .hint-trigger {
+      background: none;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.72rem;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 8px;
+      transition: color 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .hint-trigger:hover { color: var(--gold); }
+
+    .hint-popover {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: rgba(12, 12, 20, 0.97);
+      border: 1px solid rgba(232,201,127,0.18);
+      border-radius: 16px;
+      padding: 1rem 1.1rem;
+      width: 210px;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 20;
+    }
+
+    .hint-popover.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hint-popover-label {
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+      opacity: 0.55;
+      margin-bottom: 0.65rem;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .hint-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.4rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid rgba(232,201,127,0.07);
+    }
+
+    .hint-row:last-of-type { border-bottom: none; }
+    .hint-row:hover { background: rgba(232,201,127,0.06); }
+
+    .hint-row-left { display: flex; flex-direction: column; gap: 2px; }
+
+    .hint-row-type {
+      font-size: 0.56rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hint-row-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    .hint-copy-icon {
+      font-size: 0.72rem;
+      opacity: 0.35;
+      transition: opacity 0.15s;
+    }
+
+    .hint-row:hover .hint-copy-icon { opacity: 1; }
+
+    /* panah bawah popover */
+    .hint-arrow {
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 9px;
+      height: 9px;
+      background: rgba(12,12,20,0.97);
+      border-right: 1px solid rgba(232,201,127,0.18);
+      border-bottom: 1px solid rgba(232,201,127,0.18);
+    }
+
+    /* toast copy */
+    .copy-toast {
+      position: fixed;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: rgba(232,201,127,0.95);
+      color: #0a0a0a;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      padding: 0.42rem 1rem;
+      border-radius: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s, transform 0.18s;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 420px) {
       .card {
@@ -263,7 +399,33 @@
     </form>
 
     <p class="card-footer">hanya untuk yang <span>tahu</span> ✦</p>
+
+    <div class="hint-wrap">
+      <div class="hint-container">
+        <button class="hint-trigger" id="hintTrigger">butuh bantuan? →</button>
+        <div class="hint-popover" id="hintPopover">
+          <div class="hint-popover-label">info login</div>
+          <div class="hint-row" data-field="username" data-value="zaxganteng">
+            <div class="hint-row-left">
+              <span class="hint-row-type">username</span>
+              <span class="hint-row-value">zaxganteng</span>
+            </div>
+            <span class="hint-copy-icon">⎘</span>
+          </div>
+          <div class="hint-row" data-field="password" data-value="ayamcoding">
+            <div class="hint-row-left">
+              <span class="hint-row-type">password</span>
+              <span class="hint-row-value">ayamcoding</span>
+            </div>
+            <span class="hint-copy-icon">⎘</span>
+          </div>
+          <div class="hint-arrow"></div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="copy-toast" id="copyToast"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
