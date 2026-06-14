@@ -1,3 +1,6 @@
+/* ============================================
+   RESET & GLOBAL
+   ============================================ */
 * {
   box-sizing: border-box;
   -webkit-user-select: none;
@@ -6,24 +9,20 @@
   -webkit-touch-callout: none;
 }
 
-
-/* Biarkan form login tetap bisa diketik */
+/* Form login tetap bisa diketik */
 input[type="text"],
 input[type="password"] {
   -webkit-user-select: text;
   user-select: text;
 }
 
-/* HILANGKAN SCROLLBAR */
+/* Tidak ada scroll sama sekali */
 html, body {
   margin: 0;
   padding: 0;
-  overflow: hidden !important;
-  height: 100% !important;
-  width: 100% !important;
-  position: fixed !important;
-  top: 0;
-  left: 0;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 body {
@@ -32,24 +31,25 @@ body {
   color: #f4f1ea;
 }
 
-/* Warna teks tombol SweetAlert jadi hitam */
-.swal-button-dark {
-  color: #000000 !important;
-  font-weight: 600 !important;
-}
-
 :root {
-  --bg-dark: #0d0f14;
-  --bg-card: #181b24;
-  --gold: #e8c97f;
+  --bg-dark:   #0d0f14;
+  --bg-card:   #181b24;
+  --gold:      #e8c97f;
   --gold-soft: #f5e3b3;
-  --text-light: #f4f1ea;
-  --text-muted: #a9adc1;
-  --accent: #ff9fb2;
-  --border: rgba(232, 201, 127, 0.25);
+  --text-light:#f4f1ea;
+  --text-muted:#a9adc1;
+  --accent:    #ff9fb2;
+  --border:    rgba(232, 201, 127, 0.25);
 }
 
-/* ===== LOGIN PAGE ===== */
+/* ============================================
+   OVERLAY (tap to begin)
+   ============================================ */
+/* Sudah di-handle inline di HTML - tidak perlu di sini */
+
+/* ============================================
+   LOGIN PAGE
+   ============================================ */
 .login_container {
   display: flex;
   flex-direction: column;
@@ -66,6 +66,7 @@ body {
   margin-bottom: 30px;
   color: var(--gold-soft);
   text-shadow: 0 0 12px rgba(232, 201, 127, 0.25);
+  animation: floatGlow 4s ease-in-out infinite;
 }
 
 .login_form {
@@ -73,18 +74,19 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
+  width: clamp(300px, 90vw, 400px);
   height: 300px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
+  animation: fadeUp 0.8s ease both;
 }
 
 input[type="text"],
 input[type="password"] {
-  width: 300px;
+  width: clamp(220px, 70vw, 300px);
   height: 42px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
@@ -109,7 +111,7 @@ input[type="password"]:focus {
 }
 
 button[type="submit"] {
-  width: 300px;
+  width: clamp(220px, 70vw, 300px);
   height: 42px;
   border: none;
   border-radius: 8px;
@@ -135,34 +137,31 @@ button[type="submit"]:hover {
   text-align: center;
 }
 
-.login_form input:focus {
-  outline: none;
-  border-color: #e8c97f;   /* emas */
-  box-shadow: 0 0 0 3px rgba(232, 201, 127, 0.2);
-  transition: 0.2s;
-}
-
 #loginBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ===== BIRTHDAY PAGE ===== */
+/* ============================================
+   BIRTHDAY PAGE - CONTAINER UTAMA
+   ============================================ */
 .song {
   visibility: hidden;
 }
 
 .container {
   height: 100vh;
-  margin: 0 auto;
+  width: 100vw;
+  margin: 0;
   overflow: hidden;
   position: relative;
   text-align: center;
+  /* JS akan set visibility: visible saat animasi mulai */
   visibility: hidden;
-  width: 100vw;
   background: radial-gradient(circle at top, #1a1d29 0%, #0d0f14 70%);
 }
 
+/* Semua section di-stack di tengah, animasi GSAP yang gerakkan */
 .container > div {
   left: 0;
   right: 0;
@@ -170,8 +169,24 @@ button[type="submit"]:hover {
   position: absolute;
 }
 
+/* Efek cahaya halus di background */
+.container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(232,201,127,0.06), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   SECTION .one dan .two (Hai, Nama)
+   ============================================ */
 .one {
-  font-size: 4.5rem;
+  /* clamp: min, preferred, max */
+  font-size: clamp(2rem, 6vw, 4.5rem);
   color: var(--text-light);
 }
 
@@ -181,23 +196,29 @@ button[type="submit"]:hover {
 }
 
 .two {
-  font-size: 1.2rem;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
   font-weight: 300;
   color: var(--text-muted);
 }
 
+/* ============================================
+   SECTION .three (Selamat ulang tahun)
+   ============================================ */
 .three {
-  font-size: 3rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
   color: var(--gold-soft);
 }
 
+/* ============================================
+   SECTION .four (Chat box ucapan)
+   ============================================ */
 .four .text-box {
   border: 1px solid var(--border);
   border-radius: 20px;
   margin: 0 auto;
   padding: 16px;
   position: relative;
-  width: 600px;
+  width: clamp(300px, 90vw, 600px);
   background: var(--bg-card);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   color: var(--text-light);
@@ -206,12 +227,15 @@ button[type="submit"]:hover {
 .text-box p {
   margin: 0;
   text-align: left;
+  font-size: clamp(0.85rem, 2vw, 1rem);
 }
 
+/* Huruf-huruf di chatbox tersembunyi, GSAP yang munculkan satu-satu */
 .text-box span {
   visibility: hidden;
 }
 
+/* Tombol "KIRIM UCAPAN" */
 .text-box .fake-btn {
   background-color: #2c2f3a;
   border-radius: 6px;
@@ -240,27 +264,16 @@ button[type="submit"]:hover {
   opacity: 0;
 }
 
-@keyframes pulseButton {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 6px 18px rgba(232, 201, 127, 0.3);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 6px 25px rgba(232, 201, 127, 0.6), 0 0 10px rgba(232, 201, 127, 0.4);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 6px 18px rgba(232, 201, 127, 0.3);
-  }
-}
-
+/* ============================================
+   SECTION .five (Teks-teks narasi)
+   ============================================ */
 .five p {
-  font-size: 2rem;
+  font-size: clamp(1rem, 3vw, 2rem);
   position: absolute;
   left: 0;
   right: 0;
   color: var(--text-light);
+  padding: 0 20px;
 }
 
 .idea-3 strong {
@@ -270,161 +283,214 @@ button[type="submit"]:hover {
 }
 
 .five .idea-5 {
-  font-size: 4rem;
+  font-size: clamp(2rem, 5vw, 4rem);
   color: var(--gold-soft);
 }
 
+/* ============================================
+   SECTION .idea-6 (J A D I) - HARUS BESAR & TENGAH
+   ============================================ */
 .idea-5 span,
 .idea-6 span,
 .wish-hbd span {
   display: inline-block;
 }
 
-/* ===== PERBAIKAN IDEA-6 (SELAMAT) DI TENGAH & BESAR ===== */
+/* FIX: idea-6 harus full width agar tulisan centered */
 .idea-6 {
-  text-align: center !important;
-  width: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  margin: 0 auto !important;
+  width: 100%;
+  text-align: center;
 }
 
 .idea-6 span {
-  font-size: 5rem !important;
-  font-weight: bold;
+  /* clamp: HP kecil 2.5rem → HP besar 4rem → laptop 6rem */
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 700;
   color: var(--gold);
   text-shadow: 0 0 40px rgba(232, 201, 127, 0.4);
-  display: inline-block;
-  letter-spacing: 8px;
+  letter-spacing: clamp(4px, 1vw, 10px);
 }
 
-/* ===== PERBAIKAN FOTO & TOPI ===== */
+/* ============================================
+   SECTION .six (Foto + Topi + Wish)
+   ============================================ */
+/* FIX: width fit-content + margin auto supaya topi posisinya
+   relatif terhadap foto, bukan terhadap layar */
 .six {
   position: relative;
-  top: 8vh;
+  top: 5vh;
   z-index: 1;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.six img.profile-picture {
-  display: block;
-  width: 280px;
-  height: 280px;
-  max-width: 80%;
-  object-fit: cover;
-  border-radius: 30px;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
-  border: 2px solid var(--border);
+  /* Kiri-kanan di-center karena .container > div punya left:0 right:0 */
+  left: 0;
+  right: 0;
   margin: 0 auto;
 }
 
-/* TOPI - DEKAT DENGAN FOTO */
+/* Foto profil: ukuran responsif, border-radius 30px bukan bulat */
+.six img.profile-picture {
+  display: block;
+  width: clamp(160px, 35vw, 280px);
+  height: clamp(160px, 35vw, 280px);
+  object-fit: cover;
+  border-radius: 30px;           /* FIX: bukan 50%, sesuai permintaan */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--border);
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.4s ease;
+}
+
+.six img.profile-picture:hover {
+  box-shadow: 0 0 60px rgba(232, 201, 127, 0.35);
+}
+
+/* TOPI - FIX UTAMA:
+   - position absolute relatif ke .six (bukan ke layar)
+   - left dihitung dari tepi kiri .six, bukan dari layar
+   - rotate -22deg di desktop */
 .six .hat {
   position: absolute;
-  top: -75px;
-  left: 41%;
-  transform: translateX(-50%) rotate(-22deg) !important;
-  width: 70px;
+  top: -55px;
+  /* Ini diposisikan di atas pojok kiri foto.
+     .six lebarnya = lebar foto (fit-content).
+     Pojok kiri foto = 0, jadi hat di left: -10px sudah pas */
+  left: -10px;
+  width: clamp(50px, 8vw, 80px);
   height: auto;
+  transform: rotate(-22deg);
+  transform-origin: bottom right;
+  /* FIX: hapus semua stroke/shadow */
   background: none !important;
   box-shadow: none !important;
   border: none !important;
+  border-radius: 0 !important;
   z-index: 10;
   pointer-events: none;
+  filter: none !important;
 }
 
-/* Hilangkan stroke dari SVG topi */
-.six .hat svg,
-.six .hat svg *,
-.six .hat path,
-.six .hat circle {
+/* Hapus stroke SVG topi */
+.six .hat,
+.six .hat * {
   stroke: none !important;
   stroke-width: 0 !important;
 }
 
-/* ===== PERBAIKAN TEKS WISH - TIDAK TERPOTONG ===== */
+/* ============================================
+   WISH TEXT (di bawah foto)
+   ============================================ */
 .wish {
-  width: 100%;
-  max-width: 550px;
-  margin: 15px auto 0;
-  padding: 10px;
+  width: clamp(280px, 90vw, 500px);
+  margin: 12px auto 0;
+  padding: 0 10px;
   text-align: center;
-  overflow: visible !important;
 }
 
 .wish-hbd {
-  font-size: 2rem;
-  margin: 0 0 10px 0;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  margin: 0 0 8px 0;
   text-transform: uppercase;
   color: var(--gold);
   text-shadow: 0 0 20px rgba(232, 201, 127, 0.35);
 }
 
 .wish h5 {
-  font-size: 1rem !important;
+  font-size: clamp(0.7rem, 1.8vw, 0.95rem);
   font-weight: 300;
-  line-height: 1.4 !important;
-  margin: 8px 0 0 !important;
+  line-height: 1.5;
+  margin: 6px 0 0;
   color: var(--text-light);
-  white-space: normal !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
-  overflow: visible !important;
-  padding: 0 10px !important;
-  display: block !important;
-  height: auto !important;
+  white-space: normal;
+  word-wrap: break-word;
+  padding: 0 5px;
+  display: block;
+  height: auto;
 }
 
-/* BALON */
+/* ============================================
+   SECTION .seven / .ballons (Balon naik)
+   ============================================ */
+/* FIX: .seven harus fixed full-screen supaya balon bisa terbang
+   tanpa membuat elemen lain bergeser */
+.seven {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ballons {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Balon: ukuran responsif agar tidak nutupin layar HP */
 .ballons img {
   display: inline-block;
   position: absolute;
+  /* clamp: HP kecil 30px, HP besar 45px, laptop 60px */
+  width: clamp(30px, 5vw, 60px);
+  height: auto;
+  pointer-events: none;
 }
 
-.ballons img:nth-child(even) {
-  left: -10%;
-}
+/* Posisi horizontal balon (GSAP yang gerakkan vertikal) */
+.ballons img:nth-child(even) { left: -5%; }
+.ballons img:nth-child(odd)  { right: -5%; }
+.ballons img:nth-child(3n)   { left: 30%; }
 
-.ballons img:nth-child(odd) {
-  right: -10%;
-}
-
-.ballons img:nth-child(3n + 0) {
-  left: 30%;
-}
-
+/* ============================================
+   SECTION .eight (Lingkaran confetti)
+   ============================================ */
+/* FIX UTAMA: .eight harus fixed full-screen dengan z-index positif,
+   bukan z-index: -1 yang membuat lingkaran di belakang segalanya
+   dan tidak terlihat */
 .seven .eight {
-  height: 100vh;
   position: fixed;
   top: 0;
+  left: 0;
+  height: 100vh;
   width: 100vw;
+  pointer-events: none;
+  /* z-index harus di atas .container tapi tidak ganggu overlay */
+  z-index: 5;
 }
 
 .eight svg {
-  left: 0;
   position: absolute;
-  top: 0;
+  /* FIX: visibility hidden di awal - GSAP yang set visible saat animasi */
   visibility: hidden;
-  width: 25px;
-  z-index: -1;
+  /* FIX: width lebih kecil, scale akan diperbesar oleh GSAP */
+  width: 20px;
+  height: 20px;
+  /* FIX: z-index positif, bukan -1 */
+  z-index: 5;
 }
 
-.eight svg:nth-child(1) { fill: #e8c97f; left: 5vw; top: 7vh; }
+/* Posisi tiap lingkaran tersebar di layar */
+.eight svg:nth-child(1) { fill: #e8c97f; left: 5vw;  top: 7vh;  }
 .eight svg:nth-child(2) { fill: #ff9fb2; left: 35vw; top: 23vh; }
 .eight svg:nth-child(3) { fill: #8c7ae6; left: 23vw; top: 33vh; }
 .eight svg:nth-child(4) { fill: #6fa8dc; left: 57vw; top: 43vh; }
-.eight svg:nth-child(5) { fill: #f0b27a; left: 7vw; top: 68vh; }
+.eight svg:nth-child(5) { fill: #f0b27a; left: 7vw;  top: 68vh; }
 .eight svg:nth-child(6) { fill: #e8c97f; left: 77vw; top: 42vh; }
 .eight svg:nth-child(7) { fill: #ff9fb2; left: 83vw; top: 68vh; }
 .eight svg:nth-child(8) { fill: #8c7ae6; left: 37vw; top: 86vh; }
 .eight svg:nth-child(9) { fill: #6fa8dc; left: 87vw; top: 94vh; }
 
+/* ============================================
+   SECTION .nine (Penutup)
+   ============================================ */
 .nine p {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 3vw, 2rem);
   font-weight: 300;
   color: var(--text-muted);
 }
@@ -438,188 +504,106 @@ button[type="submit"]:hover {
   z-index: 3;
   color: var(--gold);
   text-decoration: underline;
+  border-bottom: 1px dashed var(--gold);
+  padding-bottom: 2px;
+  transition: color 0.3s ease, letter-spacing 0.3s ease;
 }
 
 #replay:hover {
   color: var(--gold-soft);
+  letter-spacing: 1px;
 }
 
+/* SweetAlert dark theme */
 .swal-dark {
   border: 1px solid var(--border);
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
 }
 
-/* Animasi */
+/* ============================================
+   ANIMASI
+   ============================================ */
 @keyframes floatGlow {
-  0%, 100% { transform: translateY(0); text-shadow: 0 0 12px rgba(232,201,127,0.25); }
-  50% { transform: translateY(-4px); text-shadow: 0 0 20px rgba(232,201,127,0.45); }
-}
-
-.login_container h2 {
-  animation: floatGlow 4s ease-in-out infinite;
-}
-
-.login_form {
-  animation: fadeUp 0.8s ease both;
+  0%, 100% {
+    transform: translateY(0);
+    text-shadow: 0 0 12px rgba(232,201,127,0.25);
+  }
+  50% {
+    transform: translateY(-4px);
+    text-shadow: 0 0 20px rgba(232,201,127,0.45);
+  }
 }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.container::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(232,201,127,0.06), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255,159,178,0.06), transparent 40%);
-  pointer-events: none;
-  z-index: 0;
+@keyframes pulseButton {
+  0%   { transform: scale(1);    box-shadow: 0 6px 18px rgba(232,201,127,0.3); }
+  50%  { transform: scale(1.05); box-shadow: 0 6px 25px rgba(232,201,127,0.6), 0 0 10px rgba(232,201,127,0.4); }
+  100% { transform: scale(1);    box-shadow: 0 6px 18px rgba(232,201,127,0.3); }
 }
 
-/* ===== RESPONSIF HP ===== */
-@media (max-width: 768px) {
-  .container {
-    width: 100%;
-    padding: 0 10px;
+/* ============================================
+   MEDIA QUERY - HP KECIL (max 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  /* Container section mulai lebih tinggi agar tidak kepotong */
+  .container > div {
+    top: 15vh;
   }
 
+  /* Topi sedikit lebih kecil & rotate -15deg di HP */
+  .six .hat {
+    width: 44px;
+    top: -40px;
+    left: -8px;
+    transform: rotate(-15deg);
+  }
+
+  /* Text box tidak melebihi layar */
   .four .text-box {
-    width: 90%;
+    width: 92vw;
   }
 
+  /* Tombol kirim ucapan */
   .text-box .fake-btn {
-    bottom: -50px;
-    right: 5px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    bottom: -44px;
+    right: 4px;
+  }
+}
+
+/* ============================================
+   MEDIA QUERY - HP BESAR / TABLET (481-768px)
+   ============================================ */
+@media (min-width: 481px) and (max-width: 768px) {
+  .six .hat {
+    transform: rotate(-18deg);
+  }
+}
+
+/* ============================================
+   MEDIA QUERY - LAPTOP TINGGI PENDEK (landscape HP)
+   ============================================ */
+@media screen and (max-height: 500px) {
+  .container > div {
+    top: 8vh;
   }
 
-  .idea-5 span {
-    display: block;
+  .six {
+    top: 2vh;
   }
 
-  .idea-6 span {
-    font-size: 3rem !important;
-    letter-spacing: 4px;
+  .six img.profile-picture {
+    width: 120px;
+    height: 120px;
   }
 
   .six .hat {
-    width: 50px;
+    width: 38px;
     top: -30px;
   }
-
-  .wish-hbd {
-    font-size: 1.8rem;
-  }
-
-  .wish h5 {
-    font-size: 0.85rem !important;
-  }
-
-  .nine p {
-    font-size: 1.5rem;
-  }
-  
-  .six img.profile-picture {
-    width: 220px;
-    height: 220px;
-  }
-}
-
-@media (max-width: 480px) {
-  .wish h5 {
-    font-size: 0.75rem !important;
-  }
-  
-  .idea-6 span {
-    font-size: 2rem !important;
-    letter-spacing: 2px;
-  }
-  
-  .six .hat {
-    width: 40px;
-    top: -25px;
-  }
-  
-  .six img.profile-picture {
-    width: 180px;
-    height: 180px;
-  }
-  
-  .wish-hbd {
-    font-size: 1.4rem;
-  }
-}
-
-/* ===== EFEK FLOATING & GLOW UNTUK FOTO ===== */
-.floating-glow {
-  animation: floatGlowPhoto 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
-  transition: all 0.3s ease;
-}
-
-@keyframes floatGlowPhoto {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes glowPulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(232, 201, 127, 0.4), 0 15px 50px rgba(0, 0, 0, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 12px rgba(232, 201, 127, 0), 0 20px 60px rgba(0, 0, 0, 0.7);
-  }
-}
-
-/* Efek partikel bunga di sekitar foto */
-.six {
-  position: relative;
-  overflow: visible;
-}
-
-.six::before {
-  content: '';
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  background: radial-gradient(circle, rgba(232,201,127,0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  animation: rotateGlow 8s linear infinite;
-}
-
-@keyframes rotateGlow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Bunga/partikel berjatuhan (confetti style) */
-@keyframes fall {
-  0% {
-    transform: translateY(-100px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-.petal {
-  position: fixed;
-  pointer-events: none;
-  z-index: 999;
-  font-size: 20px;
-  animation: fall linear infinite;
 }
