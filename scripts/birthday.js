@@ -157,8 +157,7 @@ const animationTimeline = () => {
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
 
     // ===== .idea-5: Stagger Word Drop — per span, Back.easeOut natural =====
-.from(".idea-5", 0.9, { opacity: 0, scale: 0.3, ease: Elastic.easeOut.config(1, 0.5) }, "+=2")
-.to(".idea-5", 0.4, { textShadow: "0 0 30px rgba(232,201,127,0.8)", ease: Power2.easeOut }, "-=0.2")
+.from(".idea-5", 0.8, { opacity: 0, rotationX: 90, y: 60, transformOrigin: "50% 100%", ease: Back.easeOut.config(1.5) }, "+=2")
 .to(".idea-5 span", 0.7, { rotation: 90, x: 8, ease: Power2.easeOut }, "+=1.5")
 .to(".idea-5", 0.7, { opacity: 0, scale: 0.2, ease: Power3.easeIn }, "+=2.0")
 
