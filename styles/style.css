@@ -361,8 +361,8 @@ button[type="submit"]:hover {
 /* HP: posisi sesuai permintaan */
 @media (max-width: 768px) {
   .six .hat {
-    top: -78px !important;
-    left: 34% !important;
+    top: -73px !important;
+    left: 30% !important;
     transform: translateX(-50%) rotate(-22deg) !important;
     width: min(60px, 15vw);
   }
@@ -431,22 +431,40 @@ button[type="submit"]:hover {
 }
 
 
+/* HAPUS atau KOMENTAR baris ini:
 .seven .eight {
   height: 100vh;
   position: fixed;
   top: 0;
   width: 100vw;
 }
+*/
 
-.eight svg {
-  left: 0;
-  position: absolute;
+/* GANTI DENGAN INI */
+.eight {
+  position: fixed;
   top: 0;
-  visibility: hidden;
-  width: 25px;
-  z-index: -1;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: visible;
 }
 
+.eight svg {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  visibility: hidden;
+  opacity: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+/* Warna dan posisi tetap seperti punyamu */
 .eight svg:nth-child(1) { fill: #e8c97f; left: 5vw; top: 7vh; }
 .eight svg:nth-child(2) { fill: #ff9fb2; left: 35vw; top: 23vh; }
 .eight svg:nth-child(3) { fill: #8c7ae6; left: 23vw; top: 33vh; }
