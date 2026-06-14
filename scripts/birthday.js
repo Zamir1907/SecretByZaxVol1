@@ -137,22 +137,23 @@ const animationTimeline = () => {
     .from(".idea-1", 0.7, ideaTextTrans)
     .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.8")
 
+    
+ // ===== .idea-2: gatau =====
     .from(".idea-2", 0.7, ideaTextTrans)
     .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.8")
 
-    .from(".idea-3", 0.7, ideaTextTrans)
+   
 
     // ===== .idea-3 strong: Highlight Pulse — lebih natural, tanpa scale agresif =====
-    .to(".idea-3 strong", 0.6, {
-      backgroundColor: "#e8c97f",
-      color: "#1a1a1a",
-      paddingLeft: "6px",
-      paddingRight: "6px",
-      borderRadius: "4px",
-      ease: Power2.easeOut
-    })
-    .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.8")
+.from(".idea-3", 0.7, ideaTextTrans)
+.to(".idea-3 strong", 0.6, {
+  backgroundSize: "100% 100%",
+  color: "#1a1a1a",
+  ease: Power2.easeOut
+})
+.to(".idea-3", 0.7, ideaTextTransLeave, "+=2.8")
 
+     // ===== .idea-4: gatau =====
     .from(".idea-4", 0.7, ideaTextTrans)
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
 
@@ -205,7 +206,7 @@ const animationTimeline = () => {
     .set(".eight svg", { visibility: "visible" })
     .staggerFromTo(".eight svg", 1.5,
       { opacity: 1, scale: 1, immediateRender: false },
-      { opacity: 0, scale: 35, repeat: 3, repeatDelay: 1.4, ease: Power2.easeOut },
+      { opacity: 0, scale: 35, repeat: 1, repeatDelay: 1.9, ease: Power2.easeOut },
       0.3);
 };
   
