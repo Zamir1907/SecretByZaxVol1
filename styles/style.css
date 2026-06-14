@@ -66,6 +66,8 @@ body {
   margin-bottom: 30px;
   color: var(--gold-soft);
   text-shadow: 0 0 12px rgba(232, 201, 127, 0.25);
+  text-align: center;
+  padding: 0 20px;
 }
 
 .login_form {
@@ -73,8 +75,12 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  height: 300px;
+  width: 90%;
+  max-width: 400px;
+  min-width: 280px;
+  height: auto;
+  min-height: 300px;
+  padding: 30px 20px;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 20px;
@@ -84,8 +90,9 @@ body {
 
 input[type="text"],
 input[type="password"] {
-  width: 300px;
-  height: 42px;
+  width: 100%;
+  max-width: 300px;
+  height: 44px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   margin-bottom: 12px;
@@ -93,6 +100,7 @@ input[type="password"] {
   background: #11141c;
   color: var(--text-light);
   font-family: inherit;
+  font-size: 16px;
   transition: border 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -109,8 +117,9 @@ input[type="password"]:focus {
 }
 
 button[type="submit"] {
-  width: 300px;
-  height: 42px;
+  width: 100%;
+  max-width: 300px;
+  height: 44px;
   border: none;
   border-radius: 8px;
   background: linear-gradient(135deg, var(--gold), #c9a45c);
@@ -137,7 +146,7 @@ button[type="submit"]:hover {
 
 .login_form input:focus {
   outline: none;
-  border-color: #e8c97f;   /* emas */
+  border-color: #e8c97f;
   box-shadow: 0 0 0 3px rgba(232, 201, 127, 0.2);
   transition: 0.2s;
 }
@@ -171,8 +180,9 @@ button[type="submit"]:hover {
 }
 
 .one {
-  font-size: 4.5rem;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   color: var(--text-light);
+  padding: 0 15px;
 }
 
 .one #name {
@@ -181,13 +191,14 @@ button[type="submit"]:hover {
 }
 
 .two {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
   font-weight: 300;
   color: var(--text-muted);
+  padding: 0 15px;
 }
 
 .three {
-  font-size: 3rem;
+  font-size: clamp(2rem, 7vw, 3rem);
   color: var(--gold-soft);
 }
 
@@ -197,7 +208,8 @@ button[type="submit"]:hover {
   margin: 0 auto;
   padding: 16px;
   position: relative;
-  width: 600px;
+  width: 90%;
+  max-width: 600px;
   background: var(--bg-card);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   color: var(--text-light);
@@ -206,6 +218,7 @@ button[type="submit"]:hover {
 .text-box p {
   margin: 0;
   text-align: left;
+  font-size: clamp(0.9rem, 3.5vw, 1rem);
 }
 
 .text-box span {
@@ -256,11 +269,12 @@ button[type="submit"]:hover {
 }
 
 .five p {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 6vw, 2rem);
   position: absolute;
   left: 0;
   right: 0;
   color: var(--text-light);
+  padding: 0 15px;
 }
 
 .idea-3 strong {
@@ -270,7 +284,7 @@ button[type="submit"]:hover {
 }
 
 .five .idea-5 {
-  font-size: 4rem;
+  font-size: clamp(2rem, 8vw, 4rem);
   color: var(--gold-soft);
 }
 
@@ -290,12 +304,12 @@ button[type="submit"]:hover {
 }
 
 .idea-6 span {
-  font-size: 5rem !important;
+  font-size: clamp(2.5rem, 10vw, 5rem) !important;
   font-weight: bold;
   color: var(--gold);
   text-shadow: 0 0 40px rgba(232, 201, 127, 0.4);
   display: inline-block;
-  letter-spacing: 8px;
+  letter-spacing: clamp(2px, 2vw, 8px);
 }
 
 /* ===== PERBAIKAN FOTO & TOPI ===== */
@@ -312,9 +326,10 @@ button[type="submit"]:hover {
 
 .six img.profile-picture {
   display: block;
-  width: 280px;
-  height: 280px;
-  max-width: 80%;
+  width: min(280px, 70vw);
+  height: min(280px, 70vw);
+  max-width: 280px;
+  max-height: 280px;
   object-fit: cover;
   border-radius: 30px;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
@@ -322,19 +337,35 @@ button[type="submit"]:hover {
   margin: 0 auto;
 }
 
-/* TOPI - DEKAT DENGAN FOTO */
+/* TOPI - responsif untuk HP dan desktop */
 .six .hat {
   position: absolute;
-  top: -75px;
-  left: 41%;
-  transform: translateX(-50%) rotate(-22deg) !important;
-  width: 70px;
+  width: min(70px, 15vw);
   height: auto;
   background: none !important;
   box-shadow: none !important;
   border: none !important;
   z-index: 10;
   pointer-events: none;
+}
+
+/* Desktop: posisi default */
+@media (min-width: 769px) {
+  .six .hat {
+    top: -75px;
+    left: 41%;
+    transform: translateX(-50%) rotate(-22deg) !important;
+  }
+}
+
+/* HP: posisi sesuai permintaan */
+@media (max-width: 768px) {
+  .six .hat {
+    top: -82px !important;
+    left: 37% !important;
+    transform: translateX(-50%) rotate(-22deg) !important;
+    width: min(60px, 15vw);
+  }
 }
 
 /* Hilangkan stroke dari SVG topi */
@@ -357,7 +388,7 @@ button[type="submit"]:hover {
 }
 
 .wish-hbd {
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 6vw, 2rem);
   margin: 0 0 10px 0;
   text-transform: uppercase;
   color: var(--gold);
@@ -365,7 +396,7 @@ button[type="submit"]:hover {
 }
 
 .wish h5 {
-  font-size: 1rem !important;
+  font-size: clamp(0.75rem, 3vw, 1rem) !important;
   font-weight: 300;
   line-height: 1.4 !important;
   margin: 8px 0 0 !important;
@@ -379,10 +410,28 @@ button[type="submit"]:hover {
   height: auto !important;
 }
 
-/* BALON */
+/* BALON - ukuran sedikit lebih kecil di HP (opsional kecilin 1%) */
 .ballons img {
   display: inline-block;
   position: absolute;
+  width: auto;
+  height: auto;
+  max-width: 12vw;
+}
+
+/* Desktop: ukuran balon normal */
+@media (min-width: 769px) {
+  .ballons img {
+    max-width: none;
+  }
+}
+
+/* HP: perkecil balon sekitar 1% dari ukuran aslinya (dengan max-width) */
+@media (max-width: 768px) {
+  .ballons img {
+    max-width: 11vw;
+    transform: scale(0.99);
+  }
 }
 
 .ballons img:nth-child(even) {
@@ -424,7 +473,7 @@ button[type="submit"]:hover {
 .eight svg:nth-child(9) { fill: #6fa8dc; left: 87vw; top: 94vh; }
 
 .nine p {
-  font-size: 2rem;
+  font-size: clamp(1.2rem, 5vw, 2rem);
   font-weight: 300;
   color: var(--text-muted);
 }
@@ -483,7 +532,7 @@ button[type="submit"]:hover {
 @media (max-width: 768px) {
   .container {
     width: 100%;
-    padding: 0 10px;
+    padding: 0;
   }
 
   .four .text-box {
@@ -499,22 +548,12 @@ button[type="submit"]:hover {
     display: block;
   }
 
-  .idea-6 span {
-    font-size: 3rem !important;
-    letter-spacing: 4px;
-  }
-
   .six .hat {
-    width: 50px;
-    top: -30px;
+    width: min(55px, 14vw);
   }
 
   .wish-hbd {
     font-size: 1.8rem;
-  }
-
-  .wish h5 {
-    font-size: 0.85rem !important;
   }
 
   .nine p {
@@ -522,8 +561,8 @@ button[type="submit"]:hover {
   }
   
   .six img.profile-picture {
-    width: 220px;
-    height: 220px;
+    width: min(220px, 65vw);
+    height: min(220px, 65vw);
   }
 }
 
@@ -532,19 +571,13 @@ button[type="submit"]:hover {
     font-size: 0.75rem !important;
   }
   
-  .idea-6 span {
-    font-size: 2rem !important;
-    letter-spacing: 2px;
-  }
-  
   .six .hat {
-    width: 40px;
-    top: -25px;
+    width: min(50px, 13vw);
   }
   
   .six img.profile-picture {
-    width: 180px;
-    height: 180px;
+    width: min(180px, 60vw);
+    height: min(180px, 60vw);
   }
   
   .wish-hbd {
