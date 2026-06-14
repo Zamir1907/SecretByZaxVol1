@@ -67,25 +67,10 @@ const setupWishButton = () => {
   }
 };
 
-// ===== FUNGSI SPLIT TEKS JADI PER KATA UNTUK ANIMASI SLIDE KIRI KE KANAN =====
-function splitTextIntoWords(element) {
-  if (!element) return;
-  const originalText = element.innerHTML;
-  // Pisahkan berdasarkan tag <br/> atau spasi
-  const words = originalText.split(/(\s+|<br\s*\/?>)/).filter(w => w !== '');
-  element.innerHTML = words.map(word => {
-    if (word.match(/<br\s*\/?>/i)) {
-      return '<br>';
-    }
-    return `<span class="word-slide" style="display:inline-block; opacity:0; transform:translateX(-30px); transition:none;">${word}</span>`;
-  }).join('');
-}
-
-// ===== ANIMATION TIMELINE (DURASI LAMBAT - DENGAN SLIDE KIRI KE KANAN) =====
+// ===== ANIMATION TIMELINE (DURASI LAMBAT - TANPA HILANGKAN FOTO) =====
 const animationTimeline = () => {
   const textBoxChars = document.querySelector(".hbd-chatbox");
   const hbd = document.querySelector(".wish-hbd");
-  const idea3 = document.querySelector(".idea-3");
 
   if (textBoxChars) {
     textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
@@ -97,13 +82,6 @@ const animationTimeline = () => {
     hbd.innerHTML = `<span>${hbd.innerHTML
       .split("")
       .join("</span><span>")}</span>`;
-  }
-
-  // SPLIT TEKS IDEA-3 MENJADI PER KATA UNTUK SLIDE KIRI KE KANAN
-  if (idea3) {
-    const originalHtml = idea3.innerHTML;
-    idea3.setAttribute('data-original', originalHtml);
-    splitTextIntoWords(idea3);
   }
 
   const ideaTextTrans = { opacity: 0, y: -20, rotationX: 5, skewX: "15deg" };
@@ -127,23 +105,9 @@ const animationTimeline = () => {
     .to(".idea-1", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-2", 0.7, ideaTextTrans)
     .to(".idea-2", 0.7, ideaTextTransLeave, "+=2.8")
-    
-    // ===== ANIMASI KHUSUS UNTUK IDEA-3 (SLIDE KIRI KE KANAN PER KATA) =====
-    // Step 1: Reset dan siapkan semua kata
-    .set(".idea-3 .word-slide", { opacity: 0, x: -40, display: "inline-block" }, "+=0.2")
-    // Step 2: Animasi per kata dari kiri ke kanan (stagger)
-    .staggerTo(".idea-3 .word-slide", 0.5, 
-      { opacity: 1, x: 0, ease: Back.easeOut.config(1.2) }, 
-      0.08, "+=0.3")
-    // Step 3: Efek highlight background kuning setelah semua kata muncul
-    .to(".idea-3 strong", 0.4, 
-      { backgroundColor: "#e8c97f", color: "#1a1a1a", scale: 1.05, repeat: 2, yoyo: true }, 
-      "+=0.5")
-    // Step 4: Tunggu sebentar lalu animasi leave
-    .to(".idea-3 .word-slide", 0.6, 
-      { opacity: 0, x: 30, stagger: 0.05, ease: Power2.easeIn }, 
-      "+=3.0")
-    
+    .from(".idea-3", 0.7, ideaTextTrans)
+    .to(".idea-3 strong", 0.5, { scale: 1.1, x: 10, backgroundColor: "#e8c97f", color: "#1a1a1a" })
+    .to(".idea-3", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-4", 0.7, ideaTextTrans)
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=2.8")
     .from(".idea-5", 0.7, { rotationX: 15, rotationZ: -10, skewY: "-5deg", y: 50, z: 10, opacity: 0 }, "+=2")
@@ -157,10 +121,11 @@ const animationTimeline = () => {
     .staggerFrom(".wish-hbd span", 0.7, { opacity: 0, y: -50, rotation: 150, skewX: "30deg", ease: Elastic.easeOut.config(1, 0.5) }, 0.1)
     .staggerFromTo(".wish-hbd span", 0.7, { scale: 1.4, rotationY: 150 }, { scale: 1, rotationY: 0, color: "#ff69b4", ease: Expo.easeOut }, 0.1, "party")
     .from(".wish h5", 0.5, { opacity: 0, y: 10, skewX: "-15deg" }, "party")    
+    // ===== EFFECT UNTUK .eight svg =====
     .set(".eight svg", { visibility: "visible" })
     .staggerFromTo(".eight svg", 1.5,
       { opacity: 1, scale: 1, immediateRender: false },
-      { opacity: 0, scale: 46, repeat: 2, repeatDelay: 1.4, ease: Power2.easeOut },
+      { opacity: 0, scale: 41, repeat: 2, repeatDelay: 1.4, ease: Power2.easeOut },
       0.3);
 };
   
