@@ -203,3 +203,6 @@ if (usernameInput) {
 if (pwInput) {
   pwInput.addEventListener("focus", clearError);
 }
+
+ document.addEventListener("contextmenu", e => e.preventDefault());
+        document.addEventListener("dragstart", e => e.preventDefault());
