@@ -233,8 +233,10 @@ window.addEventListener("load", () => {
   
   if (isInstagram()) {
     console.log('Mode Instagram aktif - user harus klik overlay untuk mulai');
-  }
+  }q
 });
 
 document.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('dblclick', e => e.preventDefault());
+// Matikan drag
+document.addEventListener('dragstart', e => e.preventDefault());
