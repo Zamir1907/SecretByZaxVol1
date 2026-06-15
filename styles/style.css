@@ -6,6 +6,13 @@
   -webkit-touch-callout: none;
 }
 
+/* Gambar tidak bisa didrag */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+}
+
 
 /* Biarkan form login tetap bisa diketik */
 input[type="text"],
